@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title text-center>
+      <p class="title">List Items</p>
+    </ion-title>
+    <div class="button">
+      <ion-fab vertical="top" horizontal="end" slot="fixed">
+              <ion-fab-button color="danger" (click)="addItem()">
+                <ion-icon name="add"></ion-icon>
+              </ion-fab-button>
+      </ion-fab>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list>
+  <ion-item-sliding *ngFor="let todo of todos">
+      <ion-item (click)="editTodo(todo)">
+        <p>{{ todo.title }}</p>
+      </ion-item>
+      <ion-item-options>
+       <ion-button color="danger" (click)="removeTodo(todo)"><ion-icon name="trash"></ion-icon> Delete</ion-button>
+      </ion-item-options>
+  </ion-item-sliding>
+
+  </ion-list>
+  <ion-button expand="full" (click)="logout()">Logout</ion-button>
+
+</ion-content>

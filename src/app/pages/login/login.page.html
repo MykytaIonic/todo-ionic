@@ -1,0 +1,52 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title text-center>
+          <p class="title">Login</p>
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
+
+    <ion-item>
+      <ion-label position="floating">Email</ion-label>
+      <ion-input type="email" formControlName="email"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Password</ion-label>
+      <ion-input type="password" formControlName="password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid" class="button-login">Login</ion-button>
+
+    <ion-text text-center>
+      <p>Don't have an account?</p>
+    </ion-text>
+
+    <ion-button expand="block" type="button" color="danger" (click)="register()" [disabled]="!credentialsForm.valid">Register</ion-button>
+    <ion-button expand="block" type="button" (click)="googleSignIn()" >Register Google</ion-button>
+  </form>
+
+  <div *ngIf="isLoggedIn; else facebookLogin">
+   <h2>Hi, {{users.name}} ({{users.email}})</h2>
+   <p>
+     Gender: {{users.gender}}
+   </p>
+   <p>
+     <img src="{{users.picture.data.url}}" width="100" alt="{{users.name}}" />
+   </p>
+   <p>
+     <button ion-button icon-right (click)="logout()">
+       Logout
+     </button>
+   </p>
+ </div>
+ <ng-template #facebookLogin>
+   <ion-button expand="block" ion-button icon-right (click)="login()">
+     Login with
+     <ion-icon name="logo-facebook"></ion-icon>
+   </ion-button>
+ </ng-template>
+</ion-content>

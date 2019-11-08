@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title text-center id="textdetail">Item Details</ion-title>
+    <div class="button">
+      <ion-fab vertical="top" horizontal="start" slot="fixed">
+              <ion-button (click)="toPreviousPage()">List Items</ion-button>
+      </ion-fab>
+      <ion-fab vertical="top" horizontal="end" slot="fixed">
+              <ion-button (click)="updateTodo()">Save</ion-button>
+      </ion-fab>
+    </div>
+  </ion-toolbar>
+</ion-header>
+<div #map_canvas id="map_canvas">
+</div>
+<ion-content>
+  <ion-list>
+        <ion-item floating-label>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input type="text" name="title" [(ngModel)]="todo.title"></ion-input>
+        </ion-item>
+
+        <ion-item floating-label>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea placeholder="Enter more information here..." [(ngModel)]="todo.description" name="description"></ion-textarea>
+        </ion-item>
+
+        <ion-toggle slot="start" [(ngModel)]="todo.isDone" name="blueberry" checked></ion-toggle>
+
+  </ion-list>
+</ion-content>
