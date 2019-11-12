@@ -46,26 +46,37 @@ export class ItemDetailsPage implements OnInit {
   loadMap() {
 
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
-      let mapOptions: GoogleMapOptions = {
-        camera: {
-          target: this.todo.position,
-          zoom: 15
-        }
-      };
+      if (this.todo.position === "") {
+        let mapOptions: GoogleMapOptions = {
+          camera: {
+            target: myLocation.latLng,
+            zoom: 15
+          }
+        };
+        this.map = GoogleMaps.create('map_canvas', mapOptions);
+      }
+      else {
+        let mapOptions: GoogleMapOptions = {
+          camera: {
+            target: this.todo.position,
+            zoom: 15
+          }
+        };
 
-    this.map = GoogleMaps.create('map_canvas', mapOptions);
+      this.map = GoogleMaps.create('map_canvas', mapOptions);
 
-    let mymarker: Marker = this.map.addMarkerSync({
-      title: 'Ionic',
-      icon: 'blue',
-      animation: 'DROP',
-      draggable: true,
-      position: this.todo.position
-    });
-    mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-      this.markerlatlong = mymarker.getPosition();
-      this.todo.position = this.markerlatlong;
-    });
+      let mymarker: Marker = this.map.addMarkerSync({
+        title: 'Ionic',
+        icon: 'blue',
+        animation: 'DROP',
+        draggable: true,
+        position: this.todo.position
+      });
+      mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+        this.markerlatlong = mymarker.getPosition();
+        this.todo.position = this.markerlatlong;
+      });
+      }
   });
 
   }

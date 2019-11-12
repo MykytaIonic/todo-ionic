@@ -25,5 +25,8 @@
       <ion-textarea placeholder="Enter more information here..." [(ngModel)]="todo.description" name="description"></ion-textarea>
     </ion-item>
 
+    <ion-button (click)="selectImage()" >Open Camera</ion-button>
+    <img [src]="image"/>
+
   </ion-list>
 </ion-content>

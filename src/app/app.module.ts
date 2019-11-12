@@ -18,6 +18,7 @@ import { InterceptorProvider } from 'src/providers/interceptor/interceptor';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
 export function jwtOptionsFactory(storage) {
 return {
@@ -42,6 +43,7 @@ providers: [
   Facebook,
   GooglePlus,
   Geolocation,
+  Camera,
   { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true }
 ],
 bootstrap: [AppComponent]
