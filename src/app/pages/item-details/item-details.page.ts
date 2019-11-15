@@ -38,6 +38,7 @@ export class ItemDetailsPage implements OnInit {
   public todoId;
   public image: any
   public images = [];
+  public photoName;
   public photos: Photo[] = [];
   public path;
   url = environment.url;
@@ -50,6 +51,7 @@ export class ItemDetailsPage implements OnInit {
           this.photoService.getPhoto(this.todoId).subscribe(res => {
             for (let i=0; i < res.length; i++) {
                this.path = `${this.url}/photos/${res[i].name}`;
+               this.photoName = res[i].name;
                this.images.unshift({
                  id: res[i].id,
                  photo: this.path,
@@ -80,8 +82,8 @@ export class ItemDetailsPage implements OnInit {
       const imgBlob = this.b64toBlob(this.image);
       const formData = new FormData();
       formData.append('image', imgBlob);
-      this.todoService.uploadImage(formData).subscribe((res: Photo) => {
-        this.photos.push(res);
+      this.todoService.updateImage(formData, this.todoId).subscribe((res) => {
+        //this.photos.push(res);
       })
     }, (err) => {
       alert("error " + JSON.stringify(err))
@@ -182,7 +184,10 @@ export class ItemDetailsPage implements OnInit {
         this.images.splice(i, 1);
       }
     }
-    this.httpClient.delete(`${this.url}/todos/photo/delete/${imageId}`)
+    debugger;
+    this.httpClient.post(`${this.url}/todos/photo/delete/${imageId}`, {
+      name: this.photoName,
+    })
       .subscribe(data => {
       }, error => {
         console.log(error);

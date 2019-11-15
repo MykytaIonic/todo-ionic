@@ -22,4 +22,8 @@ export class TodosService {
   uploadImage(image) {
     return this.httpClient.post(`${this.url}/todos/image`, image);
   }
+
+  updateImage(image, todoId) {
+    return this.httpClient.post(`${this.url}/todos/image/${todoId}`, image);
+  }
 }

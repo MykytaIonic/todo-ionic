@@ -26,7 +26,7 @@
     </ion-item>
 
     <ion-button (click)="selectImage()" >Open Camera</ion-button>
-    <img [src]="image"/>
+    <img *ngIf="image" [src]="image"/>
 
   </ion-list>
 </ion-content>
