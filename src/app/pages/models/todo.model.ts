@@ -5,5 +5,4 @@ export interface Todo {
     isDone: boolean;
     user_id: number;
     position: string;
-    //photo: object;
 }

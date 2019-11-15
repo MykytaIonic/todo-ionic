@@ -5,6 +5,7 @@ import { TodosService } from '../../services/todos.service';
 import { AuthService } from '../../services/auth.service';
 import { Storage } from '@ionic/storage';
 import { Todo } from '../models/todo.model';
+import { Photo } from '../models/photo.model';
 import { environment } from '../../../environments/environment';
 import {
   GoogleMaps,
@@ -40,9 +41,9 @@ export class AddItemPage implements OnInit {
     description: '',
     isDone: false,
     user_id: null,
-    position: '',
-    //photo: null
+    position: ''
   };
+  public photos: Photo[] = [];
   url = environment.url;
 
   constructor(
@@ -108,10 +109,9 @@ export class AddItemPage implements OnInit {
       const imgBlob = this.b64toBlob(this.image);
       const formData = new FormData();
       formData.append('image', imgBlob);
-      this.todoService.uploadImage(formData).subscribe((res) => {
-        console.log(res);
+      this.todoService.uploadImage(formData).subscribe((res: Photo) => {
+        this.photos.push(res);
       })
-      console.log(formData);
     }, (err) => {
       alert("error " + JSON.stringify(err))
     });
@@ -164,7 +164,10 @@ export class AddItemPage implements OnInit {
       this.storage.get('USER_ID').then((val) => {
         this.todo.user_id = val;
       });
-      this.httpClient.post(`${this.url}/todos/create`, this.todo)
+      this.httpClient.post(`${this.url}/todos/create`, {
+        todo: this.todo, 
+        photos: this.photos
+      })
         .subscribe(data => {
           this.todoService.todoList.next(data);
         }, error => {

@@ -27,5 +27,16 @@
 
         <ion-toggle slot="start" [(ngModel)]="todo.isDone" name="blueberry" checked></ion-toggle>
 
+        <ion-button (click)="updatePhoto()" >Open Camera</ion-button>
+
+        <ion-list>
+          <ion-item id="image" *ngFor="let image of images">
+                <ion-img [src]="image.photo"></ion-img>
+                <ion-button slot="end" color="danger" (click)="removePhoto(image)"><ion-icon name="trash"></ion-icon> Delete</ion-button>
+          </ion-item>
+        </ion-list>
+
+          <img [src]="image"/>
+
   </ion-list>
 </ion-content>
