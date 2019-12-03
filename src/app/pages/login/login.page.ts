@@ -15,11 +15,11 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class LoginPage implements OnInit {
 
-  credentialsForm: FormGroup;
-  isLoggedIn = false;
-  users: any;
-  result: any;
-  loadingController: any;
+  public credentialsForm: FormGroup;
+  public isLoggedIn = false;
+  public users: any;
+  public result: any;
+  public loadingController: any;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,6 +47,7 @@ export class LoginPage implements OnInit {
   }
 
   onSubmit() {
+    debugger;
     this.authService.login(this.credentialsForm.value).subscribe();
   }
 
@@ -69,7 +70,6 @@ export class LoginPage implements OnInit {
       const userData = {
         email: user.email
       }
-      debugger;
       this.authService.registerSocial(userData).subscribe(res =>  {
       })
     }).catch(err => console.error(err));

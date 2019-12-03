@@ -2,7 +2,6 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from '@angular/c
 import { Injectable } from '@angular/core';
 import { Observable, throwError, from } from 'rxjs';
 import { Storage } from '@ionic/storage';
-//import { _throw } from 'rxjs/observable/throw';
 import { AlertController } from '@ionic/angular';
 import { catchError, mergeMap } from 'rxjs/operators';
 import { AuthService } from '../.././app/services/auth.service';
@@ -14,7 +13,6 @@ export class InterceptorProvider implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let promise = this.storage.get('TOKEN_KEY');
-
     return from(promise).pipe(mergeMap((token) => {
       const req = request.clone({
         setHeaders: {

@@ -1,24 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { InsidePage } from '../inside/inside.page';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { NavigationExtras } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TodosService } from '../../services/todos.service';
 import { PhotoService } from '../../services/photo.service';
 import { environment } from '../../../environments/environment';
+import { DatabaseProvider } from '../../../providers/database/database';
+import { Storage } from '@ionic/storage';
 import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
   Marker,
-  Environment,
   LocationService,
   MyLocation,
-  LatLng,
 } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../models/photo.model';
@@ -41,26 +37,32 @@ export class ItemDetailsPage implements OnInit {
   public photoName;
   public photos: Photo[] = [];
   public path;
-  url = environment.url;
+  public url = environment.url;
+  public isenabled: boolean = true;
 
-  constructor(public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute : ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
-    this.activatedRoute.queryParams.subscribe((res)=>{
-          this.todo = JSON.parse(res.special);
-          this.todoId = this.todo.id;
+  constructor(private databaseProvider: DatabaseProvider, public storage: Storage, public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute: ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
+    this.activatedRoute.queryParams.subscribe((res) => {
+      this.todo = JSON.parse(res.special);
+      this.todoId = this.todo.id;
 
-          this.photoService.getPhoto(this.todoId).subscribe(res => {
-            for (let i=0; i < res.length; i++) {
-               this.path = `${this.url}/photos/${res[i].name}`;
-               this.photoName = res[i].name;
-               this.images.unshift({
-                 id: res[i].id,
-                 photo: this.path,
-                 namePhoto: res[i].name
-                });
-            }
-            console.log(res);
+      this.photoService.getPhoto(this.todoId).subscribe(res => {
+        for (let i = 0; i < res.length; i++) {
+          this.path = `${this.url}/photos/${res[i].name}`;
+          this.photoName = res[i].name;
+          this.images.unshift({
+            id: res[i].id,
+            photo: this.path,
+            namePhoto: res[i].name
           });
+        }
+      });
     });
+
+    this.storage.get('isConnect').then(async (isConnect) => {
+      if (isConnect === false) {
+        this.isenabled = false;
+      }
+    })
   }
 
   ngOnInit() {
@@ -83,7 +85,6 @@ export class ItemDetailsPage implements OnInit {
       const formData = new FormData();
       formData.append('image', imgBlob);
       this.todoService.updateImage(formData, this.todoId).subscribe((res) => {
-        //this.photos.push(res);
       })
     }, (err) => {
       alert("error " + JSON.stringify(err))
@@ -98,10 +99,10 @@ export class ItemDetailsPage implements OnInit {
     var ia = new Uint8Array(ab);
 
     for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
+      ia[i] = byteString.charCodeAt(i);
     }
     return new Blob([ab], { type: 'image/jpeg' });
-}
+  }
 
 
   async selectImage() {
@@ -138,7 +139,23 @@ export class ItemDetailsPage implements OnInit {
             zoom: 15
           }
         };
+
         this.map = GoogleMaps.create('map_canvas', mapOptions);
+
+        let mymarker: Marker = this.map.addMarkerSync({
+          title: 'Ionic',
+          icon: 'blue',
+          animation: 'DROP',
+          draggable: true,
+          position: {
+            lat: myLocation.latLng.lat,
+            lng: myLocation.latLng.lng
+          }
+        });
+        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+          this.markerlatlong = mymarker.getPosition();
+          this.todo.position = this.markerlatlong;
+        });
       }
       else {
         let mapOptions: GoogleMapOptions = {
@@ -148,32 +165,49 @@ export class ItemDetailsPage implements OnInit {
           }
         };
 
-      this.map = GoogleMaps.create('map_canvas', mapOptions);
+        this.map = GoogleMaps.create('map_canvas', mapOptions);
 
-      let mymarker: Marker = this.map.addMarkerSync({
-        title: 'Ionic',
-        icon: 'blue',
-        animation: 'DROP',
-        draggable: true,
-        position: this.todo.position
-      });
-      mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-        this.markerlatlong = mymarker.getPosition();
-        this.todo.position = this.markerlatlong;
-      });
+        let mymarker: Marker = this.map.addMarkerSync({
+          title: 'Ionic',
+          icon: 'blue',
+          animation: 'DROP',
+          draggable: true,
+          position: this.todo.position
+        });
+        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+          this.markerlatlong = mymarker.getPosition();
+          this.todo.position = this.markerlatlong;
+        });
       }
-  });
+    });
 
   }
 
   updateTodo() {
-    this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo)
-    .subscribe(data => {
-      this.todoService.todoList.next(this.todo);
+    this.storage.get('isConnect').then(async (isConnect) => {
+      if (isConnect === true) {
+        this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo)
+          .subscribe(data => {
+            this.todoService.todoList.next(this.todo);
+          }, error => {
+            console.log(error);
+          });
+        this.databaseProvider.updateAllTodo(this.todo).then(data => {
         }, error => {
           console.log(error);
         });
-    this.route.navigate(['/inside']);
+        this.route.navigate(['/inside']);
+      }
+      else if (isConnect === false) {
+        this.databaseProvider.updateTodoOffline(this.todo).then(data => {
+          console.log(data);
+        }, error => {
+          console.log(error);
+        });
+        this.todoService.todoList.next(this.todo);
+        this.route.navigate(['/inside']);
+      }
+    })
   }
 
   removePhoto(image) {
@@ -184,7 +218,6 @@ export class ItemDetailsPage implements OnInit {
         this.images.splice(i, 1);
       }
     }
-    debugger;
     this.httpClient.post(`${this.url}/todos/photo/delete/${imageId}`, {
       name: this.photoName,
     })

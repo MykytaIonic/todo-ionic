@@ -20,6 +20,9 @@ import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
+import { SQLite } from '@ionic-native/sqlite/ngx';
+import { Network } from '@ionic-native/network/ngx';
+
 export function jwtOptionsFactory(storage) {
 return {
   tokenGetter: () => {
@@ -44,6 +47,8 @@ providers: [
   GooglePlus,
   Geolocation,
   Camera,
+  Network,
+  SQLite,
   { provide: HTTP_INTERCEPTORS, useClass: InterceptorProvider, multi: true }
 ],
 bootstrap: [AppComponent]

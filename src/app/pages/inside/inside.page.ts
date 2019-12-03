@@ -1,15 +1,16 @@
 import { AuthService } from './../../services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { AddItemPage } from '../add-item/add-item.page';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationExtras } from '@angular/router';
-import { Observable } from 'rxjs';
 import { TodosService } from '../../services/todos.service';
 import { HttpClient } from '@angular/common/http';
 import { Todo } from '../models/todo.model';
 import { environment } from '../../../environments/environment';
+import { Storage } from '@ionic/storage';
+import { DatabaseProvider } from '../../../providers/database/database';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-inside',
@@ -19,9 +20,10 @@ import { environment } from '../../../environments/environment';
 export class InsidePage implements OnInit {
 
   public todos: Todo[] = [];
-  url = environment.url;
+  public url = environment.url;
+  public isConnect = true;
 
-  constructor(private httpClient: HttpClient, private todosService: TodosService, public activatedRoute: ActivatedRoute, private authService: AuthService, private toastController: ToastController, private route: Router) {
+  constructor(public network: Network, private databaseProvider: DatabaseProvider, public storage: Storage, private httpClient: HttpClient, private todosService: TodosService, public activatedRoute: ActivatedRoute, private authService: AuthService, private toastController: ToastController, private route: Router) {
     this.todosService.todoList.subscribe((res) => {
       const itemToUpdate = this.todos.find(x => x.id === res.id);
 
@@ -36,12 +38,59 @@ export class InsidePage implements OnInit {
       }
     });
 
+    this.network.onDisconnect().subscribe(() => {
+      this.isConnect = false;
+      this.storage.set('isConnect', false);
+      this.getFromSqlite();
+      console.log("Disconnect!");
+    });
+
+    this.network.onConnect().subscribe(() => {
+      this.isConnect = true;
+      this.storage.set('isConnect', true);
+      this.getFromMongo();
+      console.log("Connect!");
+    });
+  }
+
+  ngOnInit() {
+    if (this.isConnect === false) {
+    this.getFromSqlite();
+    }
+    else if (this.isConnect === true) {
+    this.getFromMongo();
+    }
+  }
+
+  test() {
+    this.databaseProvider.onUpgrade();
+  }
+
+  getFromMongo() {
     this.todosService.getTodo().subscribe((todos: Todo[]) => {
       this.todos = todos;
     });
   }
 
-  ngOnInit() {
+  getFromSqlite() {
+    this.databaseProvider.getTodos().then((todos: Todo[]) => {
+      this.todos = todos;
+    });
+  }
+
+  doRefresh(event) {
+    console.log('Begin async operation');
+
+    setTimeout(() => {
+      console.log('Async operation has ended');
+      event.target.complete();
+    }, 2000);
+    if (this.isConnect === true) {
+      this.getFromMongo();
+    }
+    else if (this.isConnect === false) {
+      this.getFromSqlite();
+    }
   }
 
   addItem() {
@@ -53,18 +102,34 @@ export class InsidePage implements OnInit {
   }
 
   removeTodo(todo) {
-    let todoId = 0;
-    for (let i = 0; i < this.todos.length; i++) {
-      if (this.todos[i] == todo) {
-        todoId = this.todos[i].id;
-        this.todos.splice(i, 1);
+    debugger;
+    this.storage.get('isConnect').then(async (isConnect) => {
+      let todoId = 0;
+      for (let i = 0; i < this.todos.length; i++) {
+        if (this.todos[i] == todo) {
+          todoId = this.todos[i].id;
+          this.todos.splice(i, 1);
+        }
       }
-    }
-    this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
-      .subscribe(data => {
-      }, error => {
-        console.log(error);
-      });
+      if (isConnect === true) {
+        this.databaseProvider.deleteRow(todoId).then(data => {
+        }, error => {
+          console.log(error);
+        });
+
+        this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
+          .subscribe(data => {
+          }, error => {
+            console.log(error);
+          });
+      }
+      else if (isConnect === false) {
+        this.databaseProvider.deleteOffline(todo).then(data => {
+        }, error => {
+          console.log(error);
+        });
+      }
+    });
   }
 
   editTodo(todo) {

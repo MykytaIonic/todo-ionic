@@ -27,7 +27,7 @@
 
         <ion-toggle slot="start" [(ngModel)]="todo.isDone" name="blueberry" checked></ion-toggle>
 
-        <ion-button (click)="updatePhoto()" >Open Camera</ion-button>
+        <ion-button [disabled]="!isenabled" (click)="updatePhoto()" >Open Camera</ion-button>
 
         <ion-list>
           <ion-item id="image" *ngFor="let image of images">
@@ -36,7 +36,7 @@
           </ion-item>
         </ion-list>
 
-          <img [src]="image"/>
+          <img *ngIf="image" [src]="image"/>
 
   </ion-list>
 </ion-content>

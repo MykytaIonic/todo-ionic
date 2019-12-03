@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TodosService } from '../../services/todos.service';
-import { AuthService } from '../../services/auth.service';
 import { Storage } from '@ionic/storage';
 import { Todo } from '../models/todo.model';
 import { Photo } from '../models/photo.model';
@@ -12,17 +11,14 @@ import {
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  CameraPosition,
-  MarkerOptions,
   Marker,
-  Environment,
   LocationService,
   MyLocation,
-  LatLng,
 } from '@ionic-native/google-maps';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
+import { DatabaseProvider } from '../../../providers/database/database';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-add-item',
@@ -35,7 +31,6 @@ export class AddItemPage implements OnInit {
   public title: string;
   public markerlatlong;
   public image: any;
-  private description: string;
   public todo: Todo = {
     title: '',
     description: '',
@@ -44,18 +39,26 @@ export class AddItemPage implements OnInit {
     position: ''
   };
   public photos: Photo[] = [];
-  url = environment.url;
+  public url = environment.url;
+  public isConnect = true;
+  public isenabled:boolean = true;
 
   constructor(
-    public todoService: TodosService,
-    private route: Router,
+    private databaseProvider: DatabaseProvider,
     private httpClient: HttpClient,
-    private authService: AuthService,
+    private route: Router,
+    public todoService: TodosService,
     public storage: Storage,
     public actionSheetController: ActionSheetController,
-    private geolocation: Geolocation,
-    private camera: Camera
+    private camera: Camera,
+    public network: Network
   ) {
+
+    this.storage.get('isConnect').then(async (isConnect) => {
+      if (isConnect === false) {
+        this.isenabled=false;
+      }})
+    
   }
 
   ngOnInit() {
@@ -159,20 +162,45 @@ export class AddItemPage implements OnInit {
     this.route.navigate(['/inside']);
   }
 
-  addTodo() {
+  async addTodo() {
     if (Object.keys(this.todo).length != 0) {
-      this.storage.get('USER_ID').then((val) => {
-        this.todo.user_id = val;
-      });
-      this.httpClient.post(`${this.url}/todos/create`, {
-        todo: this.todo, 
-        photos: this.photos
+      this.storage.get('isConnect').then(async (isConnect) => {
+        if (isConnect === true) {
+          this.storage.get('USER_ID').then((val) => {
+            this.todo.user_id = val;
+          });
+          this.httpClient.post(`${this.url}/todos/create`, {
+            todo: this.todo, 
+            photos: this.photos
+          })
+            .subscribe(data => {
+              this.todoService.todoList.next(data);
+              this.databaseProvider.addTodo(data).then(data => {
+                this.todo.id = data;
+              }, error => {
+                console.log(error);
+              });
+              alert("Disconnect!");     
+            }, error => {
+              console.log(error);
+            });
+
+          const val = await this.storage.get('USER_ID')
+          this.todo.user_id = val;       
+          }
+          else if (isConnect === false) {
+            const val = await this.storage.get('USER_ID')
+            this.todo.user_id = val;
+       
+            this.databaseProvider.addTodo(this.todo).then(data => {
+              this.todo.id = data;
+            }, error => {
+              console.log(error);
+            });
+            this.todoService.todoList.next(this.todo);
+            alert("Disconnect!");
+          }
       })
-        .subscribe(data => {
-          this.todoService.todoList.next(data);
-        }, error => {
-          console.log(error);
-        });
     }
     this.route.navigate(['/inside']);
   }
