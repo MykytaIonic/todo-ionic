@@ -87,8 +87,8 @@ export class DatabaseProvider {
 
   async addTodo(todo) {
     let id;
-    this.todo = todo;
-    let data = [todo.id, todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
+    let position = JSON.stringify(todo.position);
+    let data = [todo.id, todo.title, todo.description, todo.isDone, todo.user_id, position];
     await this.databaseObj.executeSql("INSERT INTO todos (mongoId, title, description, isDone, user_id, position) VALUES (?,?, ?, ?, ?, ?)", data)
       .then(res => {
         id = res.insertId;
@@ -186,7 +186,8 @@ export class DatabaseProvider {
 
   updateAllTodo(todo) {
     return new Promise((resolve, reject) => {
-      let data = [todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
+      let position = JSON.stringify(todo.position);
+      let data = [todo.title, todo.description, todo.isDone, todo.user_id, position];
       const sqlQuery = "UPDATE " + this.todos + " SET title=?, description=?, isDone=?, user_id=?, position=? WHERE mongoId='" + todo.id.toString()+"'";
       this.databaseObj.executeSql(sqlQuery, data)
         .then(res => {
@@ -200,7 +201,7 @@ export class DatabaseProvider {
   updateTodoOffline(todo) {
     return new Promise((resolve, reject) => {
       if(todo.mongoId != null) {
-        let data = [todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
+        let data = [todo.title, todo.description, todo.isDone, todo.user_id];
         let todoToUpdate = [todo.mongoId, todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
         this.databaseObj.executeSql("INSERT INTO updatedTable (mongoId, title, description, isDone, user_id, position) VALUES (?, ?, ?, ?, ?, ?)", todoToUpdate)
         .then(res => {
@@ -209,7 +210,7 @@ export class DatabaseProvider {
         console.log("error " + JSON.stringify(e))
         });
 
-        const sqlQuery = "UPDATE " + this.todos + " SET title=?, description=?, isDone=?, user_id=?, position=? WHERE id=" + todo.id;
+        const sqlQuery = "UPDATE " + this.todos + " SET title=?, description=?, isDone=?, user_id=? WHERE id=" + todo.id;
         this.databaseObj.executeSql(sqlQuery, data)
           .then(res => {
             resolve(res);
@@ -219,8 +220,8 @@ export class DatabaseProvider {
       }
 
       else if(todo.mongoId === null) {
-        let data = [todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
-        const sqlQuery = "UPDATE " + this.todos + " SET title=?, description=?, isDone=?, user_id=?, position=? WHERE id=" + todo.id;
+        let data = [todo.title, todo.description, todo.isDone, todo.user_id];
+        const sqlQuery = "UPDATE " + this.todos + " SET title=?, description=?, isDone=?, user_id=? WHERE id=" + todo.id;
         this.databaseObj.executeSql(sqlQuery, data)
           .then(res => {
             resolve(res);

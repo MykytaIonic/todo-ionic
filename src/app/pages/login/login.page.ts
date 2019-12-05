@@ -47,7 +47,6 @@ export class LoginPage implements OnInit {
   }
 
   onSubmit() {
-    debugger;
     this.authService.login(this.credentialsForm.value).subscribe();
   }
 
@@ -75,11 +74,11 @@ export class LoginPage implements OnInit {
     }).catch(err => console.error(err));
   }
 
- //Login Facebook
   login() {
     debugger;
   this.fb.login(['email', 'public_profile'])
     .then(res => {
+      console.log("Success!");
       debugger;
       if(res.status === "connected") {
         this.isLoggedIn = true;

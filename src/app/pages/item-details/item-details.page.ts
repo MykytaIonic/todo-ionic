@@ -45,14 +45,18 @@ export class ItemDetailsPage implements OnInit {
       this.todo = JSON.parse(res.special);
       this.todoId = this.todo.id;
 
-      this.photoService.getPhoto(this.todoId).subscribe(res => {
-        for (let i = 0; i < res.length; i++) {
-          this.path = `${this.url}/photos/${res[i].name}`;
-          this.photoName = res[i].name;
-          this.images.unshift({
-            id: res[i].id,
-            photo: this.path,
-            namePhoto: res[i].name
+      this.storage.get('isConnect').then(async (isConnect) => {
+        if (isConnect === true) {
+          this.photoService.getPhoto(this.todoId).subscribe(res => {
+            for (let i = 0; i < res.length; i++) {
+              this.path = `${this.url}/photos/${res[i].name}`;
+              this.photoName = res[i].name;
+              this.images.unshift({
+                id: res[i].id,
+                photo: this.path,
+                namePhoto: res[i].name
+              });
+            }
           });
         }
       });
@@ -132,7 +136,7 @@ export class ItemDetailsPage implements OnInit {
   loadMap() {
 
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
-      if (this.todo.position === "") {
+      if (this.todo.position === "" || this.todo.position === null) {
         let mapOptions: GoogleMapOptions = {
           camera: {
             target: myLocation.latLng,
@@ -199,6 +203,7 @@ export class ItemDetailsPage implements OnInit {
         this.route.navigate(['/inside']);
       }
       else if (isConnect === false) {
+        debugger;
         this.databaseProvider.updateTodoOffline(this.todo).then(data => {
           console.log(data);
         }, error => {

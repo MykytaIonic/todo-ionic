@@ -1,12 +1,12 @@
 <ion-header>
     <ion-toolbar>
-        <ion-title text-center>
+        <ion-title class="ion-text-center">
           <p class="title">Login</p>
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="credentialsForm" (ngSubmit)="onSubmit()">
 
     <ion-item>
@@ -21,7 +21,7 @@
 
     <ion-button expand="block" type="submit" [disabled]="!credentialsForm.valid" class="button-login">Login</ion-button>
 
-    <ion-text text-center>
+    <ion-text class="ion-text-center">
       <p>Don't have an account?</p>
     </ion-text>
 

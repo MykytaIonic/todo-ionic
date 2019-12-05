@@ -102,7 +102,6 @@ export class InsidePage implements OnInit {
   }
 
   removeTodo(todo) {
-    debugger;
     this.storage.get('isConnect').then(async (isConnect) => {
       let todoId = 0;
       for (let i = 0; i < this.todos.length; i++) {

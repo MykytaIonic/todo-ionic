@@ -5,6 +5,7 @@ import { Todo } from '../pages/models/todo.model';
 import { environment } from '../../environments/environment';
 import { TodosService } from './todos.service';
 import { DatabaseProvider } from '../../providers/database/database';
+import { isDate } from 'util';
 
 @Injectable({
     providedIn: 'root'
@@ -67,8 +68,20 @@ export class OfflineService {
             res.forEach(todo => {
                 if (todo) {
                     updated.push(todo);
+                    todo.position = JSON.parse(todo.position);
                 }
             });
+            if (updated.length != 0) {
+                res.forEach(todo => {
+                    this.httpClient.put(`${this.url}/todos/update/`, {
+                        todo
+                    }).subscribe(data => {
+                        this.databaseProvider.deleteUpdated();
+                    }, error => {
+                        console.log(error);
+                    });
+                })
+            }
             console.log(updated);
         })
     }
