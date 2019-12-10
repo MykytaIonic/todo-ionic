@@ -4,7 +4,7 @@ import { Observable, throwError, from } from 'rxjs';
 import { Storage } from '@ionic/storage';
 import { AlertController } from '@ionic/angular';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { AuthService } from '../.././app/services/auth.service';
+import { AuthService } from '../../app/shared/services/auth.service';
 
 @Injectable()
 export class InterceptorProvider implements HttpInterceptor {

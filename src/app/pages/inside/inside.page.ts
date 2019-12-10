@@ -1,12 +1,12 @@
-import { AuthService } from './../../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationExtras } from '@angular/router';
-import { TodosService } from '../../services/todos.service';
+import { TodosService } from '../../shared/services/todos.service';
 import { HttpClient } from '@angular/common/http';
-import { Todo } from '../models/todo.model';
+import { Todo } from '../../shared/models/todo.model';
 import { environment } from '../../../environments/environment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from '../../../providers/database/database';
@@ -69,10 +69,6 @@ export class InsidePage implements OnInit, OnDestroy {
     else {
       this.getFromMongo();
     }
-  }
-
-  public test() {
-    this.databaseProvider.onUpgrade();
   }
 
   private getFromMongo() {

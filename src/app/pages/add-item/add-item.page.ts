@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { TodosService } from '../../services/todos.service';
+import { TodosService } from '../../shared/services/todos.service';
 import { Storage } from '@ionic/storage';
-import { Todo } from '../models/todo.model';
-import { Photo } from '../models/photo.model';
+import { Todo } from '../../shared/models/todo.model';
+import { Photo } from '../../shared/models/photo.model';
 import { environment } from '../../../environments/environment';
+import { PhotoService } from '../../shared/services/photo.service';
 import {
   GoogleMaps,
   GoogleMap,
@@ -52,7 +53,8 @@ export class AddItemPage implements OnInit {
     public todoService: TodosService,
     public storage: Storage,
     public actionSheetController: ActionSheetController,
-    public network: Network
+    public network: Network,
+    public photoService: PhotoService
   ) {
 
     this.storage.get('isConnect').then(async (isConnect) => {
@@ -116,7 +118,7 @@ export class AddItemPage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.image = 'data:image/jpeg;base64,' + imageData;
-      const imgBlob = this.b64toBlob(this.image);
+      const imgBlob = this.photoService.b64toBlob(this.image);
       const formData = new FormData();
       formData.append('image', imgBlob);
       this.todoService.uploadImage(formData).subscribe((res: Photo) => {
@@ -127,19 +129,6 @@ export class AddItemPage implements OnInit {
     });
 
   }
-
-  public b64toBlob(dataURI) {
-
-    var byteString = atob(dataURI.split(',')[1]);
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-
-    for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: 'image/jpeg' });
-}
-
 
   public async selectImage() {
     const actionSheet = await this.actionSheetController.create({

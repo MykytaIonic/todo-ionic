@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../shared/services/auth.service';
 import { Facebook } from '@ionic-native/facebook/ngx';
 declare var gapi: any;
 import { Storage } from '@ionic/storage';

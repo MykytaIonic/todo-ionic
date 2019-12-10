@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
-import { Todo } from '../pages/models/todo.model';
-import { environment } from '../../environments/environment';
+import { Todo } from '../models/todo.model';
+import { environment } from '../../../environments/environment';
 import { TodosService } from './todos.service';
-import { DatabaseProvider } from '../../providers/database/database';
+import { DatabaseProvider } from '../../../providers/database/database';
 import { isDate } from 'util';
 
 @Injectable({

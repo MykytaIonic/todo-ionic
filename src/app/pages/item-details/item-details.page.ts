@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { TodosService } from '../../services/todos.service';
-import { PhotoService } from '../../services/photo.service';
+import { TodosService } from '../../shared/services/todos.service';
+import { PhotoService } from '../../shared/services/photo.service';
 import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
@@ -17,7 +17,7 @@ import {
   MyLocation,
 } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Photo } from '../models/photo.model';
+import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 
@@ -85,7 +85,7 @@ export class ItemDetailsPage implements OnInit {
 
     this.camera.getPicture(options).then((imageData) => {
       this.image = 'data:image/jpeg;base64,' + imageData;
-      const imgBlob = this.b64toBlob(this.image);
+      const imgBlob = this.photoService.b64toBlob(this.image);
       const formData = new FormData();
       formData.append('image', imgBlob);
       this.todoService.updateImage(formData, this.todoId).subscribe((res) => {
@@ -95,19 +95,6 @@ export class ItemDetailsPage implements OnInit {
     });
 
   }
-
-  public b64toBlob(dataURI) {
-
-    var byteString = atob(dataURI.split(',')[1]);
-    var ab = new ArrayBuffer(byteString.length);
-    var ia = new Uint8Array(ab);
-
-    for (var i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-    return new Blob([ab], { type: 'image/jpeg' });
-  }
-
 
   public async selectImage() {
     const actionSheet = await this.actionSheetController.create({

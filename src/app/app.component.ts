@@ -3,10 +3,10 @@ import { Network } from '@ionic-native/network/ngx';
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AuthService } from './services/auth.service';
+import { AuthService } from './shared/services/auth.service';
 import { Router } from '@angular/router';
 import { Storage } from '@ionic/storage';
-import { OfflineService } from './services/offline.service';
+import { OfflineService } from './shared/services/offline.service';
 
 @Component({
   selector: 'app-root',
