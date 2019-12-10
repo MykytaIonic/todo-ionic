@@ -9,10 +9,10 @@ import { ResolvedStaticSymbol } from '@angular/compiler';
 })
 export class DatabaseProvider {
 
-  databaseObj: SQLiteObject;
-  name_model: string = "";
-  row_data: any = [];
-  deleted: any;
+  private databaseObj: SQLiteObject;
+  public name_model: string = "";
+  private row_data: any = [];
+  public deleted: any;
   readonly database_name: string = "todos.db";
   readonly todos: string = "todos";
   readonly deletedTable: string = "deletedTable";
@@ -32,7 +32,7 @@ export class DatabaseProvider {
   }
 
 
-  createDB() {
+   private createDB() {
     this.sqlite.create({
       name: this.database_name,
       location: 'default'
@@ -49,7 +49,7 @@ export class DatabaseProvider {
       });
   }
 
-  createTableTodos() {
+  private createTableTodos() {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.todos + ' (id INTEGER PRIMARY KEY, pid , mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Todos Created!');
@@ -59,7 +59,7 @@ export class DatabaseProvider {
       });
   }
 
-  createDeletedTable() {
+  private createDeletedTable() {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.deletedTable + ' (id INTEGER PRIMARY KEY, pid, mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Deleted Created!');
@@ -69,7 +69,7 @@ export class DatabaseProvider {
       });
   }
 
-  createUpdatedTable() {
+  private createUpdatedTable() {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.updatedTable + ' (id INTEGER PRIMARY KEY, pid, mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Updated Created!');
@@ -79,13 +79,13 @@ export class DatabaseProvider {
       });
   }
 
-  onUpgrade() {
+  public onUpgrade() {
     this.databaseObj.executeSql("DROP TABLE " + this.todos, []);
     this.databaseObj.executeSql("DROP TABLE " + this.deletedTable, []);
     console.log("Success!");
   }
 
-  async addTodo(todo) {
+  public async addTodo(todo) {
     let id;
     let position = JSON.stringify(todo.position);
     let data = [todo.id, todo.title, todo.description, todo.isDone, todo.user_id, position];
@@ -101,7 +101,7 @@ export class DatabaseProvider {
     return id;
   }
 
-  async getTodos() {
+  public async getTodos() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -123,7 +123,7 @@ export class DatabaseProvider {
     return this.row_data;
   }
 
-  async deleteRow(todoId) {
+  public async deleteRow(todoId) {
     await this.databaseObj.executeSql("DELETE FROM " + this.todos + " WHERE mongoId = " + "'" + todoId + "'", [])
       .then(async (res) => {
         console.log(res);
@@ -134,7 +134,7 @@ export class DatabaseProvider {
       });
   }
 
-  async deleteOffline(todo) {
+  public async deleteOffline(todo) {
     let id;
     let data = [todo.mongoId, todo.title, todo.description, todo.isDone, todo.user_id, todo.position];
     await this.databaseObj.executeSql("INSERT INTO deletedTable (mongoId, title, description, isDone, user_id, position) VALUES (?, ?, ?, ?, ?, ?)", data)
@@ -154,7 +154,7 @@ export class DatabaseProvider {
       });
   }
 
-  async getDeleted() {
+  public async getDeleted() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -175,7 +175,7 @@ export class DatabaseProvider {
     return this.row_data;
   }
 
-  updateTodo(todosElements) {
+  public updateTodo(todosElements) {
     todosElements.forEach((todo) => {
       this.databaseObj.executeSql(`UPDATE ${this.todos} SET mongoId = ? WHERE id = ${todo.pid}`, [todo.id])
         .then(res => {
@@ -184,7 +184,7 @@ export class DatabaseProvider {
     })
   }
 
-  updateAllTodo(todo) {
+  public updateAllTodo(todo) {
     return new Promise((resolve, reject) => {
       let position = JSON.stringify(todo.position);
       let data = [todo.title, todo.description, todo.isDone, todo.user_id, position];
@@ -198,7 +198,7 @@ export class DatabaseProvider {
   });
 }
 
-  updateTodoOffline(todo) {
+  public updateTodoOffline(todo) {
     return new Promise((resolve, reject) => {
       if(todo.mongoId != null) {
         let data = [todo.title, todo.description, todo.isDone, todo.user_id];
@@ -233,7 +233,7 @@ export class DatabaseProvider {
     });
   }
 
-  async getUpdated() {
+  public async getUpdated() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -254,7 +254,7 @@ export class DatabaseProvider {
     return this.row_data;
   }
 
-async deleteDeleted() {
+public async deleteDeleted() {
   await this.databaseObj.executeSql("DELETE  FROM " + this.deletedTable, [])
     .then(async (res) => {
       console.log(res);
@@ -264,7 +264,7 @@ async deleteDeleted() {
     });
 }
 
-async deleteUpdated() {
+public async deleteUpdated() {
   await this.databaseObj.executeSql("DELETE  FROM " + this.updatedTable, [])
     .then(async (res) => {
       console.log(res);

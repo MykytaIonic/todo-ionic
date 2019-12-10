@@ -1,5 +1,5 @@
 import { AuthService } from './../../services/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
@@ -11,20 +11,21 @@ import { environment } from '../../../environments/environment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Network } from '@ionic-native/network/ngx';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-inside',
   templateUrl: './inside.page.html',
   styleUrls: ['./inside.page.scss'],
 })
-export class InsidePage implements OnInit {
-
+export class InsidePage implements OnInit, OnDestroy {
+  public subscriptions: Subscription[] = [];
   public todos: Todo[] = [];
-  public url = environment.url;
+  private url = environment.url;
   public isConnect = true;
 
   constructor(public network: Network, private databaseProvider: DatabaseProvider, public storage: Storage, private httpClient: HttpClient, private todosService: TodosService, public activatedRoute: ActivatedRoute, private authService: AuthService, private toastController: ToastController, private route: Router) {
-    this.todosService.todoList.subscribe((res) => {
+    const sub = this.todosService.todoList.subscribe((res) => {
       const itemToUpdate = this.todos.find(x => x.id === res.id);
 
       if (itemToUpdate) {
@@ -37,6 +38,8 @@ export class InsidePage implements OnInit {
         this.todos.push(res);
       }
     });
+
+    this.subscriptions.push(sub);
 
     this.network.onDisconnect().subscribe(() => {
       this.isConnect = false;
@@ -53,55 +56,61 @@ export class InsidePage implements OnInit {
     });
   }
 
+  ngOnDestroy() {
+    this.subscriptions.forEach(x => {
+      x.unsubscribe()
+    })
+  }
+
   ngOnInit() {
     if (this.isConnect === false) {
-    this.getFromSqlite();
+      this.getFromSqlite();
     }
-    else if (this.isConnect === true) {
-    this.getFromMongo();
+    else {
+      this.getFromMongo();
     }
   }
 
-  test() {
+  public test() {
     this.databaseProvider.onUpgrade();
   }
 
-  getFromMongo() {
+  private getFromMongo() {
     this.todosService.getTodo().subscribe((todos: Todo[]) => {
       this.todos = todos;
     });
   }
 
-  getFromSqlite() {
+  private getFromSqlite() {
     this.databaseProvider.getTodos().then((todos: Todo[]) => {
       this.todos = todos;
     });
   }
 
-  doRefresh(event) {
-    console.log('Begin async operation');
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      event.target.complete();
-    }, 2000);
+  public doRefresh(event) {
     if (this.isConnect === true) {
-      this.getFromMongo();
+     this.todosService.getTodo().subscribe((todos: Todo[]) => {
+      this.todos = todos;
+      event.target.complete();
+    });
     }
     else if (this.isConnect === false) {
-      this.getFromSqlite();
+     this.databaseProvider.getTodos().then((todos: Todo[]) => {
+      this.todos = todos;
+      event.target.complete();
+    });
     }
   }
 
-  addItem() {
+  public addItem() {
     this.route.navigate(['/add-item']);
   }
 
-  logout() {
+  public logout() {
     this.authService.logout();
   }
 
-  removeTodo(todo) {
+  public removeTodo(todo) {
     this.storage.get('isConnect').then(async (isConnect) => {
       let todoId = 0;
       for (let i = 0; i < this.todos.length; i++) {
@@ -131,7 +140,7 @@ export class InsidePage implements OnInit {
     });
   }
 
-  editTodo(todo) {
+  public editTodo(todo) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(todo)

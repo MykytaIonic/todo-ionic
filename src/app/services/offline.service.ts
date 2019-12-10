@@ -12,7 +12,7 @@ import { isDate } from 'util';
 })
 export class OfflineService {
 
-    public url = environment.url;
+    private url = environment.url;
     public todo: Todo = {
         title: '',
         description: '',
@@ -24,7 +24,7 @@ export class OfflineService {
     constructor(private httpClient: HttpClient, public storage: Storage, public todoService: TodosService, private databaseProvider: DatabaseProvider) {
     }
 
-    addOffline() {
+    public addOffline() {
         this.databaseProvider.getTodos().then(res => {
             const todo = [];
             res.forEach(todos => {
@@ -41,7 +41,7 @@ export class OfflineService {
         })
     }
 
-    deleteOffline() {
+    public deleteOffline() {
         this.databaseProvider.getDeleted().then(res => {
             const deleted = [];
             res.forEach(todo => {
@@ -62,7 +62,7 @@ export class OfflineService {
         })
     }
 
-    updateOffline() {
+    public updateOffline() {
         this.databaseProvider.getUpdated().then(res => {
             const updated = [];
             res.forEach(todo => {

@@ -19,6 +19,7 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Network } from '@ionic-native/network/ngx';
+import { createOfflineCompileUrlResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-add-item',
@@ -39,25 +40,31 @@ export class AddItemPage implements OnInit {
     position: ''
   };
   public photos: Photo[] = [];
-  public url = environment.url;
+  private url = environment.url;
   public isConnect = true;
-  public isenabled:boolean = true;
+  public isEnabled: boolean;
 
   constructor(
     private databaseProvider: DatabaseProvider,
+    private camera: Camera,
     private httpClient: HttpClient,
     private route: Router,
     public todoService: TodosService,
     public storage: Storage,
     public actionSheetController: ActionSheetController,
-    private camera: Camera,
     public network: Network
   ) {
 
     this.storage.get('isConnect').then(async (isConnect) => {
       if (isConnect === false) {
-        this.isenabled=false;
-      }})
+        this.isEnabled=false;
+        console.log(this.isEnabled);
+      }
+      else {
+        this.isEnabled=true;
+        console.log(this.isEnabled);
+      }
+    })
     
   }
 
@@ -65,7 +72,7 @@ export class AddItemPage implements OnInit {
     this.loadMap();
   }
 
-  loadMap() {
+  private loadMap() {
 
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
@@ -96,7 +103,7 @@ export class AddItemPage implements OnInit {
 
   }
 
-  openCam(sourceType) {
+  private openCam(sourceType) {
 
     const options: CameraOptions = {
       quality: 100,
@@ -134,7 +141,7 @@ export class AddItemPage implements OnInit {
 }
 
 
-  async selectImage() {
+  public async selectImage() {
     const actionSheet = await this.actionSheetController.create({
       header: "Select Image source",
       buttons: [{
@@ -158,11 +165,11 @@ export class AddItemPage implements OnInit {
     await actionSheet.present();
   }
 
-  toPreviousPage() {
+  public toPreviousPage() {
     this.route.navigate(['/inside']);
   }
 
-  async addTodo() {
+  public async addTodo() {
     if (Object.keys(this.todo).length != 0) {
       this.storage.get('isConnect').then(async (isConnect) => {
         if (isConnect === true) {

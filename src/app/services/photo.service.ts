@@ -9,13 +9,13 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class PhotoService {
-  url = environment.url;
+  private url = environment.url;
   public photoList: Subject<any> = new Subject();
   public data;
   constructor(private storage: Storage, private httpClient: HttpClient) {
    }
 
-  getPhoto(todoId): Observable<any> {
+  public getPhoto(todoId): Observable<any> {
     return this.httpClient.get<Photo[]>(`${this.url}/todos/photo/${todoId}`);
   }
 }

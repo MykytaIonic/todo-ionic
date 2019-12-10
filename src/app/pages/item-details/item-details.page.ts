@@ -37,7 +37,7 @@ export class ItemDetailsPage implements OnInit {
   public photoName;
   public photos: Photo[] = [];
   public path;
-  public url = environment.url;
+  private url = environment.url;
   public isenabled: boolean = true;
 
   constructor(private databaseProvider: DatabaseProvider, public storage: Storage, public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute: ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
@@ -73,7 +73,7 @@ export class ItemDetailsPage implements OnInit {
     this.loadMap();
   }
 
-  updatePhoto(sourceType) {
+  private updatePhoto(sourceType) {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -109,7 +109,7 @@ export class ItemDetailsPage implements OnInit {
   }
 
 
-  async selectImage() {
+  public async selectImage() {
     const actionSheet = await this.actionSheetController.create({
       header: "Select Image source",
       buttons: [{
@@ -133,7 +133,7 @@ export class ItemDetailsPage implements OnInit {
     await actionSheet.present();
   }
 
-  loadMap() {
+  private loadMap() {
 
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
       if (this.todo.position === "" || this.todo.position === null) {
@@ -187,7 +187,7 @@ export class ItemDetailsPage implements OnInit {
 
   }
 
-  updateTodo() {
+  public updateTodo() {
     this.storage.get('isConnect').then(async (isConnect) => {
       if (isConnect === true) {
         this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo)
@@ -215,7 +215,7 @@ export class ItemDetailsPage implements OnInit {
     })
   }
 
-  removePhoto(image) {
+  public removePhoto(image) {
     let imageId = 0;
     for (let i = 0; i < this.images.length; i++) {
       if (this.images[i] == image) {
@@ -232,7 +232,7 @@ export class ItemDetailsPage implements OnInit {
       });
   }
 
-  toPreviousPage() {
+  public toPreviousPage() {
     this.route.navigate(['/inside']);
   }
 

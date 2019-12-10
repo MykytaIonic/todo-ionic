@@ -9,39 +9,30 @@ import { BehaviorSubject } from 'rxjs';
 
 const TOKEN_KEY = 'TOKEN_KEY';
 const USER_ID = 'user_id';
-const helper = new JwtHelperService();
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  url = environment.url;
-  user = null;
-  authenticationState = new BehaviorSubject(false);
+  private url: string = environment.url;
+  public authenticationState = new BehaviorSubject(false);
 
   constructor(private http: HttpClient, public storage: Storage,
     private plt: Platform, private alertController: AlertController) {
-    // this.plt.ready().then(() => {
     this.checkToken();
-    // });
   }
 
-  checkToken() {
+  private checkToken() {
     this.storage.get(TOKEN_KEY).then(token => {
       if (token) {
-        // let decoded = helper.decodeToken(token);
-        // let isExpired = helper.isTokenExpired(token);
-        // if (!isExpired) {
-        // this.user = decoded;
         this.authenticationState.next(true);
       } else {
         this.storage.remove(TOKEN_KEY);
       }
-      //  }
     });
   }
 
-  register(credentials) {
+  public register(credentials) {
     return this.http.post(`${this.url}/auth/register`, credentials).pipe(
       catchError(e => {
         this.showAlert(e.error.msg);
@@ -50,12 +41,11 @@ export class AuthService {
     );
   }
 
-  registerSocial(credentials) {
+  public registerSocial(credentials) {
     return this.http.post(`${this.url}/auth/registerSocial`, credentials).pipe(
       tap(res => {
         this.storage.set('USER_ID', res['data']['user_id']);
         this.storage.set('TOKEN_KEY', res['data']['access_token']);
-        //this.user = this.helper.decodeToken(res['data']['access_token']);
         this.authenticationState.next(true);
       }),
       catchError(e => {
@@ -65,13 +55,12 @@ export class AuthService {
     );
   }
 
-  login(credentials) {
+  public login(credentials) {
     return this.http.post(`${this.url}/auth/login`, credentials)
       .pipe(
         tap(res => {
           this.storage.set('USER_ID', res['data']['user_id']);
           this.storage.set('TOKEN_KEY', res['data']['access_token']);
-          //this.user = this.helper.decodeToken(res['data']['access_token']);
           this.authenticationState.next(true);
         }),
         catchError(e => {
@@ -81,18 +70,18 @@ export class AuthService {
       );
   }
 
-  logout() {
+  public logout() {
     this.storage.remove(TOKEN_KEY).then(() => {
       this.storage.remove(USER_ID);
       this.authenticationState.next(false);
     });
   }
 
-  isAuthenticated() {
+  public isAuthenticated() {
     return this.authenticationState.value;
   }
 
-  showAlert(msg) {
+  private showAlert(msg) {
     let alert = this.alertController.create({
       message: msg,
       header: 'Error',
