@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +14,8 @@ export class RegisterPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: Router
   ) { }
 
   ngOnInit() {
@@ -28,6 +30,10 @@ export class RegisterPage implements OnInit {
       this.authService.login(this.credentialsForm.value).subscribe((res) => {
       });
     });
+  }
+
+  private toPreviousPage() {
+  this.route.navigate(['/login']);
   }
 
 }
