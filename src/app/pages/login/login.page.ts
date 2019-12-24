@@ -6,6 +6,7 @@ declare var gapi: any;
 import { Storage } from '@ionic/storage';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,8 @@ export class LoginPage implements OnInit {
   public users: any;
   public result: any;
   public loadingController: any;
+  private webClientId = environment.webClientId;
+  private clientSecret = environment.clientSecret
 
   constructor(
     private formBuilder: FormBuilder,
@@ -56,9 +59,9 @@ export class LoginPage implements OnInit {
 
   public googleSignIn() {
     this.googlePlus.login({
-      'webClientId': '510101324382-mkdatuj82tjsd7eolnju0uptbh2ntr99.apps.googleusercontent.com',
+      'webClientId': this.webClientId,
       'offline': true,
-      'clientSecret': 'O0kb7werOzxs_124K-J0vCUN',
+      'clientSecret': this.clientSecret,
       'scope': 'profile'
     })
       .then(user => {

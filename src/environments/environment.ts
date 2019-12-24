@@ -4,8 +4,9 @@
 
 export const environment = {
   production: false,
-  //url: 'http://localhost:3000'
-  url: 'http://10.10.2.217:8080'
+  url: 'http://10.10.2.217:8080',
+  webClientId: '510101324382-mkdatuj82tjsd7eolnju0uptbh2ntr99.apps.googleusercontent.com',
+  clientSecret: 'O0kb7werOzxs_124K-J0vCUN'
 };
 
 /*

@@ -72,14 +72,13 @@ export class OfflineService {
                 }
             });
             if (updated.length != 0) {
-                res.forEach(todo => {
-                    this.httpClient.put(`${this.url}/todos/update/`, {
-                        todo
-                    }).subscribe(data => {
-                        this.databaseProvider.deleteUpdated();
-                    }, error => {
-                        console.log(error);
-                    });
+                debugger;
+                this.httpClient.put(`${this.url}/todos/update`, {
+                    updated
+                }).subscribe(data => {
+                    this.databaseProvider.deleteUpdated();
+                }, error => {
+                    console.log(error);
                 })
             }
             console.log(updated);

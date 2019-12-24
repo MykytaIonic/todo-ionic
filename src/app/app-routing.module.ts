@@ -9,8 +9,8 @@ const routes: Routes = [
     loadChildren: './pages/login/login.module#LoginPageModule',
   },
   {
-    path: 'inside',
-    loadChildren: './pages/inside/inside.module#InsidePageModule',
+    path: 'home',
+    loadChildren: './pages/home/home.module#HomePageModule',
     canActivate: [AuthGuardService],
   },
   { path: 'add-item', loadChildren: './pages/add-item/add-item.module#AddItemPageModule', canActivate: [AuthGuardService], },

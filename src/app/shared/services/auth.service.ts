@@ -34,6 +34,11 @@ export class AuthService {
 
   public register(credentials) {
     return this.http.post(`${this.url}/auth/register`, credentials).pipe(
+      tap(res => {
+        this.storage.set('USER_ID', res['data']['user_id']);
+        this.storage.set('TOKEN_KEY', res['data']['access_token']);
+        this.authenticationState.next(true);
+      }),
       catchError(e => {
         this.showAlert(e.error.msg);
         throw new Error(e);

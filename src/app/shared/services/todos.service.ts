@@ -25,4 +25,12 @@ export class TodosService {
   public updateImage(image, todoId) {
     return this.httpClient.post(`${this.url}/todos/image/${todoId}`, image);
   }
+
+  public deleteTodo(todoId) {
+  this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
+      .subscribe(data => {
+      }, error => {
+        console.log(error);
+      });
+  }
 }

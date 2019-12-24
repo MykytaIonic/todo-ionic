@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { TodosService } from '../../shared/services/todos.service';
 import { Storage } from '@ionic/storage';
+import { MapService } from '../../shared/services/map.service';
 import { Todo } from '../../shared/models/todo.model';
 import { Photo } from '../../shared/models/photo.model';
 import { environment } from '../../../environments/environment';
@@ -20,7 +21,6 @@ import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Network } from '@ionic-native/network/ngx';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
 
 @Component({
   selector: 'app-add-item',
@@ -32,7 +32,7 @@ export class AddItemPage implements OnInit {
   public map: GoogleMap;
   public title: string;
   public markerlatlong;
-  public image: any;
+  public image: string;
   public todo: Todo = {
     title: '',
     description: '',
@@ -46,6 +46,7 @@ export class AddItemPage implements OnInit {
   public isEnabled: boolean;
 
   constructor(
+    private mapService: MapService,
     private databaseProvider: DatabaseProvider,
     private camera: Camera,
     private httpClient: HttpClient,
@@ -155,14 +156,14 @@ export class AddItemPage implements OnInit {
   }
 
   public toPreviousPage() {
-    this.route.navigate(['/inside']);
+    this.route.navigate(['/home']);
   }
 
   public async addTodo() {
     if (Object.keys(this.todo).length != 0) {
       this.storage.get('isConnect').then(async (isConnect) => {
         if (isConnect === true) {
-          this.storage.get('USER_ID').then((val) => {
+          await this.storage.get('USER_ID').then((val) => {
             this.todo.user_id = val;
           });
           this.httpClient.post(`${this.url}/todos/create`, {
@@ -184,7 +185,7 @@ export class AddItemPage implements OnInit {
           const val = await this.storage.get('USER_ID')
           this.todo.user_id = val;       
           }
-          else if (isConnect === false) {
+          else {
             const val = await this.storage.get('USER_ID')
             this.todo.user_id = val;
        
@@ -198,7 +199,7 @@ export class AddItemPage implements OnInit {
           }
       })
     }
-    this.route.navigate(['/inside']);
+    this.route.navigate(['/home']);
   }
 
 }

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { MapService } from '../../shared/services/map.service';
 import { TodosService } from '../../shared/services/todos.service';
 import { PhotoService } from '../../shared/services/photo.service';
 import { environment } from '../../../environments/environment';
@@ -40,12 +41,12 @@ export class ItemDetailsPage implements OnInit {
   private url = environment.url;
   public isenabled: boolean = true;
 
-  constructor(private databaseProvider: DatabaseProvider, public storage: Storage, public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute: ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
+  constructor(private mapService: MapService, private databaseProvider: DatabaseProvider, public storage: Storage, public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute: ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
     this.activatedRoute.queryParams.subscribe((res) => {
       this.todo = JSON.parse(res.special);
       this.todoId = this.todo.id;
 
-      this.storage.get('isConnect').then(async (isConnect) => {
+      this.storage.get('isConnect').then( (isConnect) => {
         if (isConnect === true) {
           this.photoService.getPhoto(this.todoId).subscribe(res => {
             for (let i = 0; i < res.length; i++) {
@@ -121,34 +122,14 @@ export class ItemDetailsPage implements OnInit {
   }
 
   private loadMap() {
-
-    LocationService.getMyLocation().then((myLocation: MyLocation) => {
-      if (this.todo.position === "" || this.todo.position === null) {
-        let mapOptions: GoogleMapOptions = {
-          camera: {
-            target: myLocation.latLng,
-            zoom: 15
-          }
-        };
-
-        this.map = GoogleMaps.create('map_canvas', mapOptions);
-
-        let mymarker: Marker = this.map.addMarkerSync({
-          title: 'Ionic',
-          icon: 'blue',
-          animation: 'DROP',
-          draggable: true,
-          position: {
-            lat: myLocation.latLng.lat,
-            lng: myLocation.latLng.lng
-          }
-        });
-        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-          this.markerlatlong = mymarker.getPosition();
-          this.todo.position = this.markerlatlong;
+      if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
+        this.mapService.location().then(res => {
+          console.log(res);
+          this.todo.position = res;
         });
       }
       else {
+        debugger;
         let mapOptions: GoogleMapOptions = {
           camera: {
             target: this.todo.position,
@@ -170,8 +151,6 @@ export class ItemDetailsPage implements OnInit {
           this.todo.position = this.markerlatlong;
         });
       }
-    });
-
   }
 
   public updateTodo() {
@@ -187,7 +166,7 @@ export class ItemDetailsPage implements OnInit {
         }, error => {
           console.log(error);
         });
-        this.route.navigate(['/inside']);
+        this.route.navigate(['/home']);
       }
       else if (isConnect === false) {
         debugger;
@@ -197,7 +176,7 @@ export class ItemDetailsPage implements OnInit {
           console.log(error);
         });
         this.todoService.todoList.next(this.todo);
-        this.route.navigate(['/inside']);
+        this.route.navigate(['/home']);
       }
     })
   }
@@ -220,7 +199,7 @@ export class ItemDetailsPage implements OnInit {
   }
 
   public toPreviousPage() {
-    this.route.navigate(['/inside']);
+    this.route.navigate(['/home']);
   }
 
 }

@@ -14,11 +14,11 @@ import { Network } from '@ionic-native/network/ngx';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-inside',
-  templateUrl: './inside.page.html',
-  styleUrls: ['./inside.page.scss'],
+  selector: 'app-home',
+  templateUrl: './home.page.html',
+  styleUrls: ['./home.page.scss'],
 })
-export class InsidePage implements OnInit, OnDestroy {
+export class HomePage implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = [];
   public todos: Todo[] = [];
   private url = environment.url;
@@ -120,12 +120,7 @@ export class InsidePage implements OnInit, OnDestroy {
         }, error => {
           console.log(error);
         });
-
-        this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
-          .subscribe(data => {
-          }, error => {
-            console.log(error);
-          });
+         this.todosService.deleteTodo(todoId); 
       }
       else if (isConnect === false) {
         this.databaseProvider.deleteOffline(todo).then(data => {

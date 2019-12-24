@@ -13,7 +13,6 @@ export class RegisterPage implements OnInit {
   public credentialsForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private authService: AuthService,
     private route: Router
   ) { }
@@ -27,8 +26,6 @@ export class RegisterPage implements OnInit {
 
   public register() {
     this.authService.register(this.credentialsForm.value).subscribe(res => {
-      this.authService.login(this.credentialsForm.value).subscribe((res) => {
-      });
     });
   }
 
