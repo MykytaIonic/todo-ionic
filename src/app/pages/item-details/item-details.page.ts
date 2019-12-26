@@ -9,13 +9,7 @@ import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
 import {
-  GoogleMaps,
-  GoogleMap,
-  GoogleMapsEvent,
-  GoogleMapOptions,
-  Marker,
-  LocationService,
-  MyLocation,
+  GoogleMap, GoogleMapsEvent, Marker, GoogleMaps, GoogleMapOptions
 } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../../shared/models/photo.model';
@@ -121,15 +115,14 @@ export class ItemDetailsPage implements OnInit {
     await actionSheet.present();
   }
 
-  private loadMap() {
+  private async loadMap() {
       if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
-        this.mapService.location().then(res => {
+        await this.mapService.location().then(res => {
           console.log(res);
           this.todo.position = res;
         });
       }
       else {
-        debugger;
         let mapOptions: GoogleMapOptions = {
           camera: {
             target: this.todo.position,

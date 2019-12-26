@@ -88,6 +88,8 @@ export class AddItemPage implements OnInit {
 
       this.map = GoogleMaps.create('map_canvas', mapOptions);
 
+      this.todo.position = JSON.parse(myLocation.latLng.toString());
+
       let mymarker: Marker = this.map.addMarkerSync({
         title: 'Ionic',
         icon: 'blue',

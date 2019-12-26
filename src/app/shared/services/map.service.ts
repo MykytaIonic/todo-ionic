@@ -28,7 +28,6 @@ export class MapService {
 
   async location() {
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
-      debugger;
 
         let mapOptions: GoogleMapOptions = {
           camera: {
@@ -57,10 +56,10 @@ export class MapService {
      return this.todo.position;
   }
 
-  public marker(todoPosition) {
+  async marker(todoPosition) {
     let mapOptions: GoogleMapOptions = {
         camera: {
-          target: this.todo.position,
+          target: todoPosition,
           zoom: 15
         }
       };
@@ -78,5 +77,6 @@ export class MapService {
         this.markerlatlong = mymarker.getPosition();
         this.todo.position = this.markerlatlong;
       });
+      return this.todo.position;
   }
 }
