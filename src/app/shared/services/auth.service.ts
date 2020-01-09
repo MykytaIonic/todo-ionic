@@ -17,8 +17,12 @@ export class AuthService {
   private url: string = environment.url;
   public authenticationState = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient, public storage: Storage,
-    private plt: Platform, private alertController: AlertController) {
+  constructor(
+    private http: HttpClient, 
+    public storage: Storage,
+    private plt: Platform, 
+    private alertController: AlertController) 
+    {
     this.checkToken();
   }
 

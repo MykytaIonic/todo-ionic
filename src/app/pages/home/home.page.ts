@@ -24,7 +24,17 @@ export class HomePage implements OnInit, OnDestroy {
   private url = environment.url;
   public isConnect = true;
 
-  constructor(public network: Network, private databaseProvider: DatabaseProvider, public storage: Storage, private httpClient: HttpClient, private todosService: TodosService, public activatedRoute: ActivatedRoute, private authService: AuthService, private toastController: ToastController, private route: Router) {
+  constructor(
+    public network: Network,
+    private databaseProvider: DatabaseProvider, 
+    public storage: Storage, 
+    private httpClient: HttpClient, 
+    private todosService: TodosService, 
+    public activatedRoute: ActivatedRoute, 
+    private authService: AuthService, 
+    private toastController: ToastController, 
+    private route: Router) 
+    {
     const sub = this.todosService.todoList.subscribe((res) => {
       const itemToUpdate = this.todos.find(x => x.id === res.id);
 

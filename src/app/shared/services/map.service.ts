@@ -26,7 +26,7 @@ export class MapService {
   constructor() {
    }
 
-  async location() {
+  async getCurrentLocation() {
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
         let mapOptions: GoogleMapOptions = {
@@ -56,27 +56,16 @@ export class MapService {
      return this.todo.position;
   }
 
-  async marker(todoPosition) {
-    let mapOptions: GoogleMapOptions = {
-        camera: {
-          target: todoPosition,
-          zoom: 15
-        }
-      };
+  async marker(todoPosition, map) {
 
-      this.map = GoogleMaps.create('map_canvas', mapOptions);
-
-      let mymarker: Marker = this.map.addMarkerSync({
+      let mymarker: Marker = map.addMarkerSync({
         title: 'Ionic',
         icon: 'blue',
         animation: 'DROP',
         draggable: true,
         position: todoPosition,
       });
-      mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-        this.markerlatlong = mymarker.getPosition();
-        this.todo.position = this.markerlatlong;
-      });
-      return this.todo.position;
+
+      return mymarker; 
   }
 }

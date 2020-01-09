@@ -89,20 +89,13 @@ export class AddItemPage implements OnInit {
       this.map = GoogleMaps.create('map_canvas', mapOptions);
 
       this.todo.position = JSON.parse(myLocation.latLng.toString());
-
-      let mymarker: Marker = this.map.addMarkerSync({
-        title: 'Ionic',
-        icon: 'blue',
-        animation: 'DROP',
-        draggable: true,
-        position: {
-          lat: myLocation.latLng.lat,
-          lng: myLocation.latLng.lng
-        }
-      });
-      mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-        this.markerlatlong = mymarker.getPosition();
-        this.todo.position = this.markerlatlong;
+      
+      this.mapService.marker(this.todo.position, this.map).then(res => {
+        const mymarker = res;
+        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+          this.markerlatlong = mymarker.getPosition();
+          this.todo.position = this.markerlatlong;
+        });
       });
     });
 

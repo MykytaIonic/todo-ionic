@@ -10,7 +10,12 @@ import { Router } from '@angular/router';
 @Injectable()
 export class InterceptorProvider implements HttpInterceptor {
 
-  constructor(private route: Router, private storage: Storage, private alertCtrl: AlertController, private authService: AuthService) { }
+  constructor(
+    private route: Router, 
+    private storage: Storage, 
+    private alertCtrl: AlertController, 
+    private authService: AuthService) 
+    { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let promise = this.storage.get('TOKEN_KEY');

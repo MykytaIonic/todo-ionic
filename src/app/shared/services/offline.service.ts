@@ -21,7 +21,12 @@ export class OfflineService {
         position: ''
     };
 
-    constructor(private httpClient: HttpClient, public storage: Storage, public todoService: TodosService, private databaseProvider: DatabaseProvider) {
+    constructor(
+        private httpClient: HttpClient, 
+        public storage: Storage, 
+        public todoService: TodosService, 
+        private databaseProvider: DatabaseProvider) 
+        {
     }
 
     public addOffline() {

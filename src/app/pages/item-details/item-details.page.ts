@@ -40,7 +40,7 @@ export class ItemDetailsPage implements OnInit {
       this.todo = JSON.parse(res.special);
       this.todoId = this.todo.id;
 
-      this.storage.get('isConnect').then( (isConnect) => {
+      this.storage.get('isConnect').then((isConnect) => {
         if (isConnect === true) {
           this.photoService.getPhoto(this.todoId).subscribe(res => {
             for (let i = 0; i < res.length; i++) {
@@ -116,59 +116,49 @@ export class ItemDetailsPage implements OnInit {
   }
 
   private loadMap() {
-      if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
-         this.mapService.location().then(res => {
-          console.log(res);
-          this.todo.position = res;
-        });
-      }
-      else {
-        let mapOptions: GoogleMapOptions = {
-          camera: {
-            target: this.todo.position,
-            zoom: 15
-          }
-        };
+    if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
+      this.mapService.getCurrentLocation().then(res => {
+        console.log(res);
+        this.todo.position = res;
+      });
+    }
+    else {
+      let mapOptions: GoogleMapOptions = {
+        camera: {
+          target: this.todo.position,
+          zoom: 15
+        }
+      };
 
-        this.map = GoogleMaps.create('map_canvas', mapOptions);
+      this.map = GoogleMaps.create('map_canvas', mapOptions);
 
-        let mymarker: Marker = this.map.addMarkerSync({
-          title: 'Ionic',
-          icon: 'blue',
-          animation: 'DROP',
-          draggable: true,
-          position: this.todo.position
-        });
+      this.mapService.marker(this.todo.position, this.map).then(res => {
+        const mymarker = res;
         mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
           this.markerlatlong = mymarker.getPosition();
           this.todo.position = this.markerlatlong;
         });
-      }
+      });
+    }
   }
 
   public updateTodo() {
     this.storage.get('isConnect').then(async (isConnect) => {
-      if (isConnect === true) {
-        this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo)
-          .subscribe(data => {
-            this.todoService.todoList.next(this.todo);
-          }, error => {
-            console.log(error);
+      try {
+        if (isConnect) {
+          const data = await this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo);
+          this.todoService.todoList.next(this.todo);
+
+          this.databaseProvider.updateAllTodo(this.todo).then(data => {
           });
-        this.databaseProvider.updateAllTodo(this.todo).then(data => {
-        }, error => {
-          console.log(error);
-        });
-        this.route.navigate(['/home']);
-      }
-      else if (isConnect === false) {
-        this.databaseProvider.updateTodoOffline(this.todo).then(data => {
-          console.log(data);
-        }, error => {
-          console.log(error);
-        });
-        this.todoService.todoList.next(this.todo);
-        this.route.navigate(['/home']);
+          this.route.navigate(['/home']);
+        } else {
+          const data = await this.databaseProvider.updateTodoOffline(this.todo);
+          this.todoService.todoList.next(this.todo);
+          this.route.navigate(['/home']);
+        }
+      } catch(e) {
+        alert(e.message)
       }
     })
   }
