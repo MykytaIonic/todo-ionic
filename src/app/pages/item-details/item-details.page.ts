@@ -115,9 +115,9 @@ export class ItemDetailsPage implements OnInit {
     await actionSheet.present();
   }
 
-  private async loadMap() {
+  private loadMap() {
       if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
-        await this.mapService.location().then(res => {
+         this.mapService.location().then(res => {
           console.log(res);
           this.todo.position = res;
         });
@@ -162,7 +162,6 @@ export class ItemDetailsPage implements OnInit {
         this.route.navigate(['/home']);
       }
       else if (isConnect === false) {
-        debugger;
         this.databaseProvider.updateTodoOffline(this.todo).then(data => {
           console.log(data);
         }, error => {

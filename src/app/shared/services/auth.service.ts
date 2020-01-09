@@ -72,7 +72,7 @@ export class AuthService {
           this.showAlert(e.error.msg);
           throw new Error(e);
         })
-      );
+      )
   }
 
   public logout() {
