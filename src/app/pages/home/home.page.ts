@@ -1,13 +1,10 @@
 import { AuthService } from '../../shared/services/auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { NavigationExtras } from '@angular/router';
 import { TodosService } from '../../shared/services/todos.service';
-import { HttpClient } from '@angular/common/http';
 import { Todo } from '../../shared/models/todo.model';
-import { environment } from '../../../environments/environment';
 import { Storage } from '@ionic/storage';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Network } from '@ionic-native/network/ngx';

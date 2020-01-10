@@ -1,19 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { TodosService } from '../../shared/services/todos.service';
 import { Storage } from '@ionic/storage';
 import { MapService } from '../../shared/services/map.service';
 import { Todo } from '../../shared/models/todo.model';
 import { Photo } from '../../shared/models/photo.model';
-import { environment } from '../../../environments/environment';
 import { PhotoService } from '../../shared/services/photo.service';
 import {
   GoogleMaps,
   GoogleMap,
   GoogleMapsEvent,
   GoogleMapOptions,
-  Marker,
   LocationService,
   MyLocation,
 } from '@ionic-native/google-maps';
@@ -41,7 +38,6 @@ export class AddItemPage implements OnInit {
     position: ''
   };
   public photos: Photo[] = [];
-  private url = environment.url;
   public isConnect = true;
   public isEnabled: boolean;
 
@@ -49,7 +45,6 @@ export class AddItemPage implements OnInit {
     private mapService: MapService,
     private databaseProvider: DatabaseProvider,
     private camera: Camera,
-    private httpClient: HttpClient,
     private route: Router,
     public todoService: TodosService,
     public storage: Storage,

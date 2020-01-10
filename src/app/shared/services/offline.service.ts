@@ -5,7 +5,6 @@ import { Todo } from '../models/todo.model';
 import { environment } from '../../../environments/environment';
 import { TodosService } from './todos.service';
 import { DatabaseProvider } from '../../../providers/database/database';
-import { isDate } from 'util';
 
 @Injectable({
     providedIn: 'root'

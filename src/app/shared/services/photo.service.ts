@@ -13,7 +13,6 @@ export class PhotoService {
   public photoList: Subject<any> = new Subject();
   public data;
   constructor(
-    private storage: Storage, 
     private httpClient: HttpClient) 
     {}
 

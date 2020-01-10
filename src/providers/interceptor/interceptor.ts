@@ -2,9 +2,7 @@ import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse
 import { Injectable } from '@angular/core';
 import { Observable, throwError, from } from 'rxjs';
 import { Storage } from '@ionic/storage';
-import { AlertController } from '@ionic/angular';
 import { catchError, mergeMap } from 'rxjs/operators';
-import { AuthService } from '../../app/shared/services/auth.service';
 import { Router } from '@angular/router';
 
 @Injectable()
@@ -12,9 +10,8 @@ export class InterceptorProvider implements HttpInterceptor {
 
   constructor(
     private route: Router, 
-    private storage: Storage, 
-    private alertCtrl: AlertController, 
-    private authService: AuthService) 
+    private storage: Storage
+    ) 
     { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

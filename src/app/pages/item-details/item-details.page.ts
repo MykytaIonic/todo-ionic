@@ -8,7 +8,7 @@ import { PhotoService } from '../../shared/services/photo.service';
 import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
-import { GoogleMap, GoogleMapsEvent, Marker, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMapsEvent, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';

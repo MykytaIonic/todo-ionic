@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
 import { SignupService } from 'src/app/shared/services/signup.service';
@@ -28,7 +28,12 @@ export class RegisterPage implements OnInit {
 
   validateEmailNotTaken(control: AbstractControl) {
     return this.signupService.checkEmailNotTaken(control.value).subscribe(res => {
-      return res ? null : { emailTaken: true };
+      if (res) {
+        alert("User has already exists");
+      }
+      else {
+        return { emailTaken: true };
+      }
     });
   }
 
@@ -42,8 +47,8 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  private toPreviousPage() {
-  this.route.navigate(['/login']);
+  public toPreviousPage() {
+    this.route.navigate(['/login']);
   }
 
 }

@@ -20,6 +20,10 @@
     <ion-input type="password" formControlName="password"></ion-input>
   </ion-item>
 
+  <div *ngIf="credentialsForm.get('email').errors && credentialsForm.get('email').errors.emailTaken">
+    😢 Oh noes, this email is already taken!
+  </div>
+
   <ion-button expand="block" type="submit" color="danger" [disabled]="!credentialsForm.valid" (click)="register(registerForm)">Register</ion-button>
 
 </form>
