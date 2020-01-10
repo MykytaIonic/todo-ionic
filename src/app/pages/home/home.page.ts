@@ -21,18 +21,15 @@ import { Subscription } from 'rxjs';
 export class HomePage implements OnInit, OnDestroy {
   public subscriptions: Subscription[] = [];
   public todos: Todo[] = [];
-  private url = environment.url;
   public isConnect = true;
 
   constructor(
     public network: Network,
     private databaseProvider: DatabaseProvider, 
     public storage: Storage, 
-    private httpClient: HttpClient, 
     private todosService: TodosService, 
     public activatedRoute: ActivatedRoute, 
     private authService: AuthService, 
-    private toastController: ToastController, 
     private route: Router) 
     {
     const sub = this.todosService.todoList.subscribe((res) => {
@@ -125,14 +122,14 @@ export class HomePage implements OnInit, OnDestroy {
           this.todos.splice(i, 1);
         }
       }
-      if (isConnect === true) {
+      if (isConnect) {
         this.databaseProvider.deleteRow(todoId).then(data => {
         }, error => {
           console.log(error);
         });
          this.todosService.deleteTodo(todoId); 
       }
-      else if (isConnect === false) {
+      else {
         this.databaseProvider.deleteOffline(todo).then(data => {
         }, error => {
           console.log(error);

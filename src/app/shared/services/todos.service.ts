@@ -18,6 +18,13 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
+  public createTodo(todo, photos) {
+    return this.httpClient.post(`${this.url}/todos/create`, {
+      todo: todo, 
+      photos: photos
+    })
+  }
+
   public uploadImage(image) {
     return this.httpClient.post(`${this.url}/todos/image`, image);
   }

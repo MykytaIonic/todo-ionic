@@ -156,32 +156,23 @@ export class AddItemPage implements OnInit {
 
   public async addTodo() {
     if (Object.keys(this.todo).length != 0) {
+      const val = await this.storage.get('USER_ID');
       this.storage.get('isConnect').then(async (isConnect) => {
         if (isConnect === true) {
           await this.storage.get('USER_ID').then((val) => {
             this.todo.user_id = val;
           });
-          this.httpClient.post(`${this.url}/todos/create`, {
-            todo: this.todo, 
-            photos: this.photos
-          })
-            .subscribe(data => {
-              this.todoService.todoList.next(data);
-              this.databaseProvider.addTodo(data).then(data => {
-                this.todo.id = data;
+          const data = await this.todoService.createTodo(this.todo, this.photos);
+          this.todoService.todoList.next(data);
+          this.databaseProvider.addTodo(data).then(data => {
+              this.todo.id = data;
               }, error => {
                 console.log(error);
               });
-              alert("Disconnect!");     
-            }, error => {
-              console.log(error);
-            });
-
-          const val = await this.storage.get('USER_ID')
+              alert("Disconnect!"); 
           this.todo.user_id = val;       
           }
           else {
-            const val = await this.storage.get('USER_ID')
             this.todo.user_id = val;
        
             this.databaseProvider.addTodo(this.todo).then(data => {

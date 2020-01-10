@@ -8,9 +8,7 @@ import { PhotoService } from '../../shared/services/photo.service';
 import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
-import {
-  GoogleMap, GoogleMapsEvent, Marker, GoogleMaps, GoogleMapOptions
-} from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMapsEvent, Marker, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
@@ -41,6 +39,7 @@ export class ItemDetailsPage implements OnInit {
       this.todoId = this.todo.id;
 
       this.storage.get('isConnect').then((isConnect) => {
+        try {
         if (isConnect === true) {
           this.photoService.getPhoto(this.todoId).subscribe(res => {
             for (let i = 0; i < res.length; i++) {
@@ -54,6 +53,9 @@ export class ItemDetailsPage implements OnInit {
             }
           });
         }
+      } catch (e) {
+        console.log(e.message);
+      }
       });
     });
 
@@ -146,19 +148,17 @@ export class ItemDetailsPage implements OnInit {
     this.storage.get('isConnect').then(async (isConnect) => {
       try {
         if (isConnect) {
-          const data = await this.httpClient.put(`${this.url}/todos/update/${this.todo.id}`, this.todo);
           this.todoService.todoList.next(this.todo);
 
           this.databaseProvider.updateAllTodo(this.todo).then(data => {
           });
           this.route.navigate(['/home']);
         } else {
-          const data = await this.databaseProvider.updateTodoOffline(this.todo);
           this.todoService.todoList.next(this.todo);
           this.route.navigate(['/home']);
         }
       } catch(e) {
-        alert(e.message)
+        alert(e.message);
       }
     })
   }

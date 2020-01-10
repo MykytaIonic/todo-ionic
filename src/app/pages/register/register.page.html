@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-<form [formGroup]="credentialsForm">
+<form [formGroup]="credentialsForm" #registerForm="ngForm">
 
   <ion-item>
     <ion-label position="floating">Email</ion-label>
@@ -20,7 +20,7 @@
     <ion-input type="password" formControlName="password"></ion-input>
   </ion-item>
 
-  <ion-button expand="block" type="submit" color="danger" [disabled]="!credentialsForm.valid" (click)="register()">Register</ion-button>
+  <ion-button expand="block" type="submit" color="danger" [disabled]="!credentialsForm.valid" (click)="register(registerForm)">Register</ion-button>
 
 </form>
 </ion-content>

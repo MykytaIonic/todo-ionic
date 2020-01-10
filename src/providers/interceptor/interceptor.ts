@@ -28,10 +28,7 @@ export class InterceptorProvider implements HttpInterceptor {
       return next.handle(req);
     }),
     catchError((error: HttpErrorResponse) => {
-      debugger;
-      let errorMessage = '';
       if (error.error.statusCode === 401) {
-        errorMessage = 'Unathorized';
         this.route.navigate(['/login']);
       }
       return throwError(error);
