@@ -86,13 +86,7 @@ export class AddItemPage implements OnInit {
 
       this.todo.position = JSON.parse(myLocation.latLng.toString());
       
-      this.mapService.marker(this.todo.position, this.map).then(res => {
-        const mymarker = res;
-        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-          this.markerlatlong = mymarker.getPosition();
-          this.todo.position = this.markerlatlong;
-        });
-      });
+      this.mapService.marker(this.todo.position, this.map);
     });
 
   }
@@ -153,31 +147,23 @@ export class AddItemPage implements OnInit {
   public async addTodo() {
     if (Object.keys(this.todo).length) {
       const val = await this.storageService.getUser();
+      this.todo.user_id = val;
       try {
       const isConnect = await this.storageService.getConnect();
-        if (isConnect === true) {
-          this.todo.user_id = val;
-          const data = await this.todoService.createTodo(this.todo, this.photos);
-          this.todoService.todoList.next(data);
-          this.databaseProvider.addTodo(data).then(data => {
-              this.todo.id = data;
-              }, error => {
-                console.log(error);
-              });
-              alert("Disconnect!");
-          this.todo.user_id = val;
+      let data;
+          if (isConnect === true) {
+            data = await this.todoService.createTodo(this.todo, this.photos);
           }
           else {
-            this.todo.user_id = val;
-
-            this.databaseProvider.addTodo(this.todo).then(data => {
-              this.todo.id = data;
-            }, error => {
-              console.log(error);
-            });
-            this.todoService.todoList.next(this.todo);
-            alert("Disconnect!");
+            data = this.todo;
           }
+      this.databaseProvider.addTodo(data).then(data => {
+        this.todo.id = data;
+      }, error => {
+        console.log(error);
+      });
+      this.todoService.todoList.next(data);
+      alert("Disconnect!");
       }
       catch(e) {
         console.log(`Error! ${e}`);

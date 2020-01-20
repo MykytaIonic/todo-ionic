@@ -20,6 +20,12 @@ export class PhotoService {
     return this.httpClient.get<Photo[]>(`${this.url}/todos/photo/${todoId}`);
   }
 
+  public deletePhoto(imageId, photoName) {
+    return this.httpClient.post(`${this.url}/todos/photo/delete/${imageId}`, {
+      name: photoName,
+    })
+  }
+
   public b64toBlob(dataURI) {
 
     var byteString = atob(dataURI.split(',')[1]);

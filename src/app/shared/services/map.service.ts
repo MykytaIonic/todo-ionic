@@ -64,6 +64,12 @@ export class MapService {
         animation: 'DROP',
         draggable: true,
         position: todoPosition,
+      }).then(res => {
+        const mymarker = res;
+        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
+          this.markerlatlong = mymarker.getPosition();
+          this.todo.position = this.markerlatlong;
+        });
       });
 
       return mymarker; 

@@ -146,13 +146,7 @@ export class ItemDetailsPage implements OnInit {
 
       this.map = GoogleMaps.create('map_canvas', mapOptions);
 
-      this.mapService.marker(this.todo.position, this.map).then(res => {
-        const mymarker = res;
-        mymarker.on(GoogleMapsEvent.MARKER_DRAG_END).subscribe(() => {
-          this.markerlatlong = mymarker.getPosition();
-          this.todo.position = this.markerlatlong;
-        });
-      });
+      this.mapService.marker(this.todo.position, this.map)
     }
   }
 
@@ -182,9 +176,7 @@ export class ItemDetailsPage implements OnInit {
         this.images.splice(i, 1);
       }
     }
-    this.httpClient.post(`${this.url}/todos/photo/delete/${imageId}`, {
-      name: this.photoName,
-    })
+    this.photoService.deletePhoto(imageId, this.photoName)
       .subscribe(data => {
       }, error => {
         console.log(error);
