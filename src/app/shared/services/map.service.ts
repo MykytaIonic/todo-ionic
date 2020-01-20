@@ -26,7 +26,7 @@ export class MapService {
   constructor() {
    }
 
-  async getCurrentLocation() {
+  async getCurrentLocation(): Promise<Object> {
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
         let mapOptions: GoogleMapOptions = {
@@ -56,7 +56,7 @@ export class MapService {
      return this.todo.position;
   }
 
-  async marker(todoPosition, map) {
+  async marker(todoPosition, map): Promise<Marker> {
 
       let mymarker: Marker = map.addMarkerSync({
         title: 'Ionic',
