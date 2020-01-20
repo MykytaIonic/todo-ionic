@@ -34,10 +34,10 @@ export class TodosService {
   }
 
   public deleteTodo(todoId) {
-  this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
-      .subscribe(data => {
-      }, error => {
-        console.log(error);
-      });
-  }
+    this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
+        .subscribe(data => {
+        }, error => {
+          console.log(error);
+        });
+    }
 }

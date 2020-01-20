@@ -76,7 +76,6 @@ export class OfflineService {
                 }
             });
             if (updated.length != 0) {
-                debugger;
                 this.httpClient.put(`${this.url}/todos/update`, {
                     updated
                 }).subscribe(data => {

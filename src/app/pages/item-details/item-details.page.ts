@@ -9,7 +9,7 @@ import { PhotoService } from '../../shared/services/photo.service';
 import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
-import { GoogleMap, GoogleMapsEvent, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
+import { GoogleMap, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
@@ -38,9 +38,7 @@ export class ItemDetailsPage implements OnInit {
      private mapService: MapService,
      private databaseProvider: DatabaseProvider, 
      public storage: Storage, 
-     public actionSheetController: ActionSheetController, 
-     private httpClient: HttpClient, 
-     private geolocation: Geolocation, 
+     public actionSheetController: ActionSheetController,  
      public todoService: TodosService, 
      public activatedRoute: ActivatedRoute, 
      private route: Router, 
@@ -146,7 +144,7 @@ export class ItemDetailsPage implements OnInit {
 
       this.map = GoogleMaps.create('map_canvas', mapOptions);
 
-      this.mapService.marker(this.todo.position, this.map)
+      this.mapService.marker(this.todo.position, this.map);
     }
   }
 

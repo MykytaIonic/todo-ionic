@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../shared/services/auth.service';
 import { Facebook } from '@ionic-native/facebook/ngx';
-declare var gapi: any;
 import { Storage } from '@ionic/storage';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Router } from '@angular/router';
@@ -74,11 +73,9 @@ export class LoginPage implements OnInit {
   }
 
   public login() {
-    debugger;
     this.fb.login(['email', 'public_profile'])
       .then(res => {
         console.log("Success!");
-        debugger;
         if (res.status === "connected") {
           this.isLoggedIn = true;
           this.getUserDetail(res.authResponse.userID);

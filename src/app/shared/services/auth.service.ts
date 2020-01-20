@@ -1,4 +1,4 @@
-import { Platform, AlertController } from '@ionic/angular';
+import { AlertController } from '@ionic/angular';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Storage } from '@ionic/storage';
@@ -19,8 +19,8 @@ export class AuthService {
   constructor(
     private http: HttpClient, 
     public storage: Storage,
-    private plt: Platform, 
-    private alertController: AlertController) 
+    private alertController: AlertController
+    ) 
     {
     this.checkToken();
   }

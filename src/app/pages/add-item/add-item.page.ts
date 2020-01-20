@@ -10,7 +10,6 @@ import { PhotoService } from '../../shared/services/photo.service';
 import {
   GoogleMaps,
   GoogleMap,
-  GoogleMapsEvent,
   GoogleMapOptions,
   LocationService,
   MyLocation,
