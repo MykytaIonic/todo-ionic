@@ -162,7 +162,6 @@ export class AddItemPage implements OnInit {
         console.log(error);
       });
       this.todoService.todoList.next(data);
-      alert("Disconnect!");
       }
       catch(e) {
         console.log(`Error! ${e}`);
