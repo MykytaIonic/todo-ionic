@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { StorageService } from '../../shared/services/storage.service';
 import { MapService } from '../../shared/services/map.service';
 import { TodosService } from '../../shared/services/todos.service';
 import { PhotoService } from '../../shared/services/photo.service';
@@ -33,12 +34,25 @@ export class ItemDetailsPage implements OnInit {
   private url = environment.url;
   public isenabled: boolean = true;
 
-  constructor(private mapService: MapService, private databaseProvider: DatabaseProvider, public storage: Storage, public actionSheetController: ActionSheetController, private httpClient: HttpClient, private geolocation: Geolocation, public todoService: TodosService, public activatedRoute: ActivatedRoute, private route: Router, public photoService: PhotoService, private camera: Camera) {
-    this.activatedRoute.queryParams.subscribe((res) => {
+  constructor(
+     private mapService: MapService,
+     private databaseProvider: DatabaseProvider, 
+     public storage: Storage, 
+     public actionSheetController: ActionSheetController, 
+     private httpClient: HttpClient, 
+     private geolocation: Geolocation, 
+     public todoService: TodosService, 
+     public activatedRoute: ActivatedRoute, 
+     private route: Router, 
+     public photoService: PhotoService, 
+     private camera: Camera,
+     public storageService: StorageService,
+     ) {
+    this.activatedRoute.queryParams.subscribe(async (res) => {
       this.todo = JSON.parse(res.special);
       this.todoId = this.todo.id;
 
-      this.storage.get('isConnect').then((isConnect) => {
+      const isConnect = await this.storageService.getConnect();
         try {
         if (isConnect === true) {
           this.photoService.getPhoto(this.todoId).subscribe(res => {
@@ -56,14 +70,12 @@ export class ItemDetailsPage implements OnInit {
       } catch (e) {
         console.log(e.message);
       }
-      });
     });
 
-    this.storage.get('isConnect').then(async (isConnect) => {
-      if (isConnect === false) {
+    const isConnect =  this.storageService.getConnect();
+      if (!isConnect) {
         this.isenabled = false;
       }
-    })
   }
 
   ngOnInit() {
@@ -145,7 +157,7 @@ export class ItemDetailsPage implements OnInit {
   }
 
   public updateTodo() {
-    this.storage.get('isConnect').then(async (isConnect) => {
+    const isConnect = this.storageService.getConnect();
       try {
         if (isConnect) {
           this.todoService.todoList.next(this.todo);
@@ -160,7 +172,6 @@ export class ItemDetailsPage implements OnInit {
       } catch(e) {
         alert(e.message);
       }
-    })
   }
 
   public removePhoto(image) {

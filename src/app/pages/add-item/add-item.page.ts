@@ -4,6 +4,7 @@ import { TodosService } from '../../shared/services/todos.service';
 import { Storage } from '@ionic/storage';
 import { MapService } from '../../shared/services/map.service';
 import { Todo } from '../../shared/models/todo.model';
+import { StorageService } from '../../shared/services/storage.service';
 import { Photo } from '../../shared/models/photo.model';
 import { PhotoService } from '../../shared/services/photo.service';
 import {
@@ -50,11 +51,12 @@ export class AddItemPage implements OnInit {
     public storage: Storage,
     public actionSheetController: ActionSheetController,
     public network: Network,
-    public photoService: PhotoService
+    public photoService: PhotoService,
+    public storageService: StorageService
   ) {
 
-    this.storage.get('isConnect').then(async (isConnect) => {
-      if (isConnect === false) {
+    const isConnect = this.storageService.getConnect();
+      if (!isConnect) {
         this.isEnabled=false;
         console.log(this.isEnabled);
       }
@@ -62,7 +64,6 @@ export class AddItemPage implements OnInit {
         this.isEnabled=true;
         console.log(this.isEnabled);
       }
-    })
     
   }
 
@@ -150,13 +151,12 @@ export class AddItemPage implements OnInit {
   }
 
   public async addTodo() {
-    if (Object.keys(this.todo).length != 0) {
-      const val = await this.storage.get('USER_ID');
-      this.storage.get('isConnect').then(async (isConnect) => {
+    if (Object.keys(this.todo).length) {
+      const val = await this.storageService.getUser();
+      try {
+      const isConnect = await this.storageService.getConnect();
         if (isConnect === true) {
-          await this.storage.get('USER_ID').then((val) => {
-            this.todo.user_id = val;
-          });
+          this.todo.user_id = val;
           const data = await this.todoService.createTodo(this.todo, this.photos);
           this.todoService.todoList.next(data);
           this.databaseProvider.addTodo(data).then(data => {
@@ -164,12 +164,12 @@ export class AddItemPage implements OnInit {
               }, error => {
                 console.log(error);
               });
-              alert("Disconnect!"); 
-          this.todo.user_id = val;       
+              alert("Disconnect!");
+          this.todo.user_id = val;
           }
           else {
             this.todo.user_id = val;
-       
+
             this.databaseProvider.addTodo(this.todo).then(data => {
               this.todo.id = data;
             }, error => {
@@ -178,7 +178,10 @@ export class AddItemPage implements OnInit {
             this.todoService.todoList.next(this.todo);
             alert("Disconnect!");
           }
-      })
+      }
+      catch(e) {
+        console.log(`Error! ${e}`);
+      }
     }
     this.route.navigate(['/home']);
   }
