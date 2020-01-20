@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
-import { ResolvedStaticSymbol } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'

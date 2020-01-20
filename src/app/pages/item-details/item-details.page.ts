@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../../shared/services/storage.service';
 import { MapService } from '../../shared/services/map.service';
 import { TodosService } from '../../shared/services/todos.service';
@@ -10,7 +9,6 @@ import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
 import { GoogleMap, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
