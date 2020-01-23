@@ -12,6 +12,7 @@ import { GoogleMap, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-ma
 import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { Todo } from 'src/app/shared/models/todo.model';
 
 @Component({
   selector: 'app-item-details',
@@ -23,12 +24,12 @@ export class ItemDetailsPage implements OnInit {
   public map: GoogleMap;
   public markerlatlong;
   public todo;
-  public todoId;
+  public todoId: number;
   public image: string;
   public images = [];
   public photoName: string;
   public photos: Photo[] = [];
-  public path;
+  public path: string;
   private url = environment.url;
   public isenabled: boolean = true;
 

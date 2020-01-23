@@ -35,7 +35,7 @@ export class AuthService {
     });
   }
 
-  public register(credentials) {
+  public register(credentials: string) {
     return this.http.post(`${this.url}/auth/register`, credentials).pipe(
       tap(res => {
         this.storage.set('USER_ID', res['data']['user_id']);
@@ -49,7 +49,7 @@ export class AuthService {
     );
   }
 
-  public registerSocial(credentials) {
+  public registerSocial(credentials: object) {
     return this.http.post(`${this.url}/auth/registerSocial`, credentials).pipe(
       tap(res => {
         this.storage.set('USER_ID', res['data']['user_id']);
@@ -63,7 +63,7 @@ export class AuthService {
     );
   }
 
-  public login(credentials) {
+  public login(credentials: string) {
     return this.http.post(`${this.url}/auth/login`, credentials)
       .pipe(
         tap(res => {

@@ -110,7 +110,7 @@ export class HomePage implements OnInit, OnDestroy {
     this.authService.logout();
   }
 
-  public removeTodo(todo) {
+  public removeTodo(todo: Todo) {
     this.storage.get('isConnect').then(async (isConnect) => {
       let todoId = 0;
       for (let i = 0; i < this.todos.length; i++) {
@@ -135,7 +135,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  public editTodo(todo) {
+  public editTodo(todo: Todo) {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(todo)

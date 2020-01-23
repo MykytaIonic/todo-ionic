@@ -16,9 +16,9 @@ export class LoginPage implements OnInit {
 
   public credentialsForm: FormGroup;
   public isLoggedIn = false;
-  public users: any;
-  public result: any;
-  public loadingController: any;
+  public users: object;
+  public result: string;
+  public loadingController: string;
   private webClientId = environment.webClientId;
   private clientSecret = environment.clientSecret
 

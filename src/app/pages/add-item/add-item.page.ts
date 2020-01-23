@@ -90,7 +90,7 @@ export class AddItemPage implements OnInit {
 
   }
 
-  private openCam(sourceType) {
+  private openCam(sourceType: number) {
 
     const options: CameraOptions = {
       quality: 100,

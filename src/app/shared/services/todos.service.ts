@@ -10,7 +10,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TodosService {
   private url = environment.url;
-  public todoList: Subject<any> = new Subject();
+  public todoList: Subject<Todo> = new Subject();
   public data;
   constructor(private httpClient: HttpClient) {
    }
