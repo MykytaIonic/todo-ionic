@@ -86,7 +86,7 @@ export class LoginPage implements OnInit {
       .catch(e => console.log('Error logging into Facebook', e));
   }
 
-  private getUserDetail(userid) {
+  private getUserDetail(userid: string) {
     this.fb.api("/" + userid + "/?fields=id,email,name,picture,gender", ["public_profile"])
       .then(res => {
         console.log(res);

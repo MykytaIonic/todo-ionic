@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Todo } from '../models/todo.model';
+import { Photo } from '../models/photo.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -18,22 +19,22 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
-  public createTodo(todo, photos): Observable<Object> {
+  public createTodo(todo: Todo, photos): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/create`, {
       todo: todo, 
       photos: photos
     })
   }
 
-  public uploadImage(image): Observable<Object> {
+  public uploadImage(image: FormData): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/image`, image);
   }
 
-  public updateImage(image, todoId): Observable<Object> {
+  public updateImage(image: FormData, todoId: number): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/image/${todoId}`, image);
   }
 
-  public deleteTodo(todoId) {
+  public deleteTodo(todoId: number) {
     this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
         .subscribe(data => {
         }, error => {

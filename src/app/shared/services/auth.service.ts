@@ -89,7 +89,7 @@ export class AuthService {
     return this.authenticationState.value;
   }
 
-  private showAlert(msg) {
+  private showAlert(msg: string) {
     let alert = this.alertController.create({
       message: msg,
       header: 'Error',

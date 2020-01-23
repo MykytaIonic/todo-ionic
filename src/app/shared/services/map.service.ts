@@ -56,7 +56,7 @@ export class MapService {
      return this.todo.position;
   }
 
-  async marker(todoPosition, map): Promise<Marker> {
+  async marker(todoPosition: string, map): Promise<Marker> {
 
       let mymarker: Marker = map.addMarkerSync({
         title: 'Ionic',

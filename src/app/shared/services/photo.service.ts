@@ -15,17 +15,17 @@ export class PhotoService {
     private httpClient: HttpClient) 
     {}
 
-  public getPhoto(todoId): Observable<Photo[]> {
+  public getPhoto(todoId: number): Observable<Photo[]> {
     return this.httpClient.get<Photo[]>(`${this.url}/todos/photo/${todoId}`);
   }
 
-  public deletePhoto(imageId, photoName): Observable<Object> {
+  public deletePhoto(imageId: number, photoName: string): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/photo/delete/${imageId}`, {
       name: photoName,
     })
   }
 
-  public b64toBlob(dataURI) {
+  public b64toBlob(dataURI: string) {
 
     var byteString = atob(dataURI.split(',')[1]);
     var ab = new ArrayBuffer(byteString.length);

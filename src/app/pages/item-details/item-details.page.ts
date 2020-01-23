@@ -164,7 +164,7 @@ export class ItemDetailsPage implements OnInit {
       }
   }
 
-  public removePhoto(image) {
+  public removePhoto(image: string) {
     let imageId = 0;
     for (let i = 0; i < this.images.length; i++) {
       if (this.images[i] == image) {
