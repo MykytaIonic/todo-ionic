@@ -6,6 +6,7 @@ import { Storage } from '@ionic/storage';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { User } from '../../shared/models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginPage implements OnInit {
 
   public credentialsForm: FormGroup;
   public isLoggedIn = false;
-  public users: object;
+  public users: User[];
   public result: string;
   public loadingController: string;
   private webClientId = environment.webClientId;
