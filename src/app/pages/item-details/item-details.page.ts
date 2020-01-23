@@ -24,9 +24,9 @@ export class ItemDetailsPage implements OnInit {
   public markerlatlong;
   public todo;
   public todoId;
-  public image: any
+  public image: string;
   public images = [];
-  public photoName;
+  public photoName: string;
   public photos: Photo[] = [];
   public path;
   private url = environment.url;
