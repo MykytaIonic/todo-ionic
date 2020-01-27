@@ -101,7 +101,7 @@ export class AddItemPage implements OnInit {
       sourceType: sourceType,
     }
 
-    this.camera.getPicture(options).then((imageData) => {
+    this.camera.getPicture(options).then((imageData: string) => {
       this.image = 'data:image/jpeg;base64,' + imageData;
       const imgBlob = this.photoService.b64toBlob(this.image);
       const formData = new FormData();
@@ -150,7 +150,7 @@ export class AddItemPage implements OnInit {
       try {
       const isConnect = await this.storageService.getConnect();
       let data;
-          if (isConnect === true) {
+          if (isConnect) {
             data = await this.todoService.createTodo(this.todo, this.photos);
           }
           else {
