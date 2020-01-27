@@ -29,7 +29,7 @@ export class HomePage implements OnInit, OnDestroy {
     private authService: AuthService, 
     private route: Router) 
     {
-    const sub = this.todosService.todoList.subscribe((res) => {
+    const sub = this.todosService.todoList.subscribe((res: Todo) => {
       const itemToUpdate = this.todos.find(x => x.id === res.id);
 
       if (itemToUpdate) {
@@ -88,13 +88,13 @@ export class HomePage implements OnInit, OnDestroy {
   }
 
   public doRefresh(event): void {
-    if (this.isConnect === true) {
+    if (this.isConnect) {
      this.todosService.getTodo().subscribe((todos: Todo[]) => {
       this.todos = todos;
       event.target.complete();
     });
     }
-    else if (this.isConnect === false) {
+    else {
      this.databaseProvider.getTodos().then((todos: Todo[]) => {
       this.todos = todos;
       event.target.complete();

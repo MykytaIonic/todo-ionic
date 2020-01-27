@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Todo } from '../models/todo.model';
-import { Photo } from '../models/photo.model';
 import { environment } from '../../../environments/environment';
+import { Photo } from '../models/photo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
-  public createTodo(todo: Todo, photos: string): Observable<Object> {
+  public createTodo(todo: Todo, photos: Photo[]): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/create`, {
       todo: todo, 
       photos: photos
