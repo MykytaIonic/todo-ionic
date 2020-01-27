@@ -12,7 +12,7 @@ export class SignupService {
   constructor(private httpClient: HttpClient) {}
 
   public checkEmailNotTaken(email: string): Observable<String> {
-    return this.httpClient.post<any>(`${this.url}/users/find`, {
+    return this.httpClient.post<string>(`${this.url}/users/find`, {
       email
     });
   }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { Todo } from 'src/app/shared/models/todo.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,8 +11,7 @@ export class DatabaseProvider {
 
   private databaseObj: SQLiteObject;
   public name_model: string = "";
-  private row_data: any = [];
-  public deleted: any;
+  private row_data: object = [];
   readonly database_name: string = "todos.db";
   readonly todos: string = "todos";
   readonly deletedTable: string = "deletedTable";
@@ -31,7 +31,7 @@ export class DatabaseProvider {
   }
 
 
-   private createDB() {
+   private createDB(): void {
     this.sqlite.create({
       name: this.database_name,
       location: 'default'
@@ -48,7 +48,7 @@ export class DatabaseProvider {
       });
   }
 
-  private createTableTodos() {
+  private createTableTodos(): void {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.todos + ' (id INTEGER PRIMARY KEY, pid , mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Todos Created!');
@@ -58,7 +58,7 @@ export class DatabaseProvider {
       });
   }
 
-  private createDeletedTable() {
+  private createDeletedTable(): void {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.deletedTable + ' (id INTEGER PRIMARY KEY, pid, mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Deleted Created!');
@@ -68,7 +68,7 @@ export class DatabaseProvider {
       });
   }
 
-  private createUpdatedTable() {
+  private createUpdatedTable(): void {
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.updatedTable + ' (id INTEGER PRIMARY KEY, pid, mongoId, title, description, isDone, user_id, position)', [])
       .then(() => {
         console.log('Table Updated Created!');
@@ -78,13 +78,13 @@ export class DatabaseProvider {
       });
   }
 
-  public onUpgrade() {
+  public onUpgrade(): void {
     this.databaseObj.executeSql("DROP TABLE " + this.todos, []);
     this.databaseObj.executeSql("DROP TABLE " + this.deletedTable, []);
     console.log("Success!");
   }
 
-  public async addTodo(todo) {
+  public async addTodo(todo: Todo): Promise<number> {
     let id;
     let position = JSON.stringify(todo.position);
     let data = [todo.id, todo.title, todo.description, todo.isDone, todo.user_id, position];
@@ -100,7 +100,7 @@ export class DatabaseProvider {
     return id;
   }
 
-  public async getTodos() {
+  public async getTodos(): Promise<object> {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -122,7 +122,7 @@ export class DatabaseProvider {
     return this.row_data;
   }
 
-  public async deleteRow(todoId) {
+  public async deleteRow(todoId: number) {
     await this.databaseObj.executeSql("DELETE FROM " + this.todos + " WHERE mongoId = " + "'" + todoId + "'", [])
       .then(async (res) => {
         console.log(res);
@@ -153,7 +153,7 @@ export class DatabaseProvider {
       });
   }
 
-  public async getDeleted() {
+  public async getDeleted(): Promise<object> {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -174,7 +174,7 @@ export class DatabaseProvider {
     return this.row_data;
   }
 
-  public updateTodo(todosElements) {
+  public updateTodo(todosElements): void{
     todosElements.forEach((todo) => {
       this.databaseObj.executeSql(`UPDATE ${this.todos} SET mongoId = ? WHERE id = ${todo.pid}`, [todo.id])
         .then(res => {
@@ -183,7 +183,7 @@ export class DatabaseProvider {
     })
   }
 
-  public updateAllTodo(todo) {
+  public updateAllTodo(todo: Todo): Promise<Todo> {
     return new Promise((resolve, reject) => {
       let position = JSON.stringify(todo.position);
       let data = [todo.title, todo.description, todo.isDone, todo.user_id, position];
@@ -197,7 +197,7 @@ export class DatabaseProvider {
   });
 }
 
-  public updateTodoOffline(todo) {
+  public updateTodoOffline(todo): Promise<Todo> {
     return new Promise((resolve, reject) => {
       if(todo.mongoId != null) {
         let data = [todo.title, todo.description, todo.isDone, todo.user_id];
@@ -232,7 +232,7 @@ export class DatabaseProvider {
     });
   }
 
-  public async getUpdated() {
+  public async getUpdated(): Promise<object> {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;

@@ -28,7 +28,7 @@ export class OfflineService {
         {
     }
 
-    public addOffline() {
+    public addOffline(): void {
         this.databaseProvider.getTodos().then(res => {
             const todo = [];
             res.forEach(todos => {
@@ -45,7 +45,7 @@ export class OfflineService {
         })
     }
 
-    public deleteOffline() {
+    public deleteOffline(): void {
         this.databaseProvider.getDeleted().then(res => {
             const deleted = [];
             res.forEach(todo => {
@@ -66,7 +66,7 @@ export class OfflineService {
         })
     }
 
-    public updateOffline() {
+    public updateOffline(): void {
         this.databaseProvider.getUpdated().then(res => {
             const updated = [];
             res.forEach(todo => {

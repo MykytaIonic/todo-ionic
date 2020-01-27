@@ -42,22 +42,22 @@ export class LoginPage implements OnInit {
       .catch(e => console.log(e));
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.credentialsForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     this.authService.login(this.credentialsForm.value).subscribe();
   }
 
-  public register() {
+  public register(): void {
     this.route.navigate(['/register']);
   }
 
-  public googleSignIn() {
+  public googleSignIn(): void {
     this.googlePlus.login({
       'webClientId': this.webClientId,
       'offline': true,
@@ -73,7 +73,7 @@ export class LoginPage implements OnInit {
       }).catch(err => console.error(err));
   }
 
-  public login() {
+  public login(): void {
     this.fb.login(['email', 'public_profile'])
       .then(res => {
         console.log("Success!");
@@ -87,7 +87,7 @@ export class LoginPage implements OnInit {
       .catch(e => console.log('Error logging into Facebook', e));
   }
 
-  private getUserDetail(userid: string) {
+  private getUserDetail(userid: string): void {
     this.fb.api("/" + userid + "/?fields=id,email,name,picture,gender", ["public_profile"])
       .then(res => {
         console.log(res);

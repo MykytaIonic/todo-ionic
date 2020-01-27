@@ -60,13 +60,13 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.forEach(x => {
       x.unsubscribe()
     })
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (this.isConnect === false) {
       this.getFromSqlite();
     }
@@ -75,19 +75,19 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
-  private getFromMongo() {
+  private getFromMongo(): void {
     this.todosService.getTodo().subscribe((todos: Todo[]) => {
       this.todos = todos;
     });
   }
 
-  private getFromSqlite() {
+  private getFromSqlite(): void {
     this.databaseProvider.getTodos().then((todos: Todo[]) => {
       this.todos = todos;
     });
   }
 
-  public doRefresh(event) {
+  public doRefresh(event): void {
     if (this.isConnect === true) {
      this.todosService.getTodo().subscribe((todos: Todo[]) => {
       this.todos = todos;
@@ -102,15 +102,15 @@ export class HomePage implements OnInit, OnDestroy {
     }
   }
 
-  public addItem() {
+  public addItem(): void {
     this.route.navigate(['/add-item']);
   }
 
-  public logout() {
+  public logout(): void {
     this.authService.logout();
   }
 
-  public removeTodo(todo: Todo) {
+  public removeTodo(todo: Todo): void {
     this.storage.get('isConnect').then(async (isConnect) => {
       let todoId = 0;
       for (let i = 0; i < this.todos.length; i++) {
@@ -135,7 +135,7 @@ export class HomePage implements OnInit, OnDestroy {
     });
   }
 
-  public editTodo(todo: Todo) {
+  public editTodo(todo: Todo): void {
     let navigationExtras: NavigationExtras = {
       queryParams: {
         special: JSON.stringify(todo)

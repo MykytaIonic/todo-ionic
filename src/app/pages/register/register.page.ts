@@ -3,6 +3,7 @@ import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/fo
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
 import { SignupService } from 'src/app/shared/services/signup.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -19,7 +20,7 @@ export class RegisterPage implements OnInit {
     private signupService: SignupService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.credentialsForm = new FormGroup({
       email: new FormControl ('', [Validators.required, Validators.email], this.validateEmailNotTaken.bind(this)),
       password: new FormControl('', [Validators.required, Validators.minLength(6)])
@@ -37,7 +38,7 @@ export class RegisterPage implements OnInit {
     });
   }
 
-  public register(registerForm: FormGroup) {
+  public register(registerForm: FormGroup): void {
     if (registerForm.valid) {
         this.authService.register(this.credentialsForm.value).subscribe(res => {
         });
@@ -47,7 +48,7 @@ export class RegisterPage implements OnInit {
     }
   }
 
-  public toPreviousPage() {
+  public toPreviousPage(): void {
     this.route.navigate(['/login']);
   }
 

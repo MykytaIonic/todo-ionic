@@ -66,11 +66,11 @@ export class AddItemPage implements OnInit {
     
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadMap();
   }
 
-  private loadMap() {
+  private loadMap(): void {
 
     LocationService.getMyLocation().then((myLocation: MyLocation) => {
 
@@ -90,7 +90,7 @@ export class AddItemPage implements OnInit {
 
   }
 
-  private openCam(sourceType: number) {
+  private openCam(sourceType: number): void {
 
     const options: CameraOptions = {
       quality: 100,
@@ -139,7 +139,7 @@ export class AddItemPage implements OnInit {
     await actionSheet.present();
   }
 
-  public toPreviousPage() {
+  public toPreviousPage(): void {
     this.route.navigate(['/home']);
   }
 

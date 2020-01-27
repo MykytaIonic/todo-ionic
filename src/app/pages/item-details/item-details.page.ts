@@ -75,11 +75,11 @@ export class ItemDetailsPage implements OnInit {
       }
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadMap();
   }
 
-  private updatePhoto(sourceType) {
+  private updatePhoto(sourceType: number): void {
     const options: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.DATA_URL,
@@ -126,7 +126,7 @@ export class ItemDetailsPage implements OnInit {
     await actionSheet.present();
   }
 
-  private loadMap() {
+  private loadMap(): void {
     if (this.todo.position === "" || this.todo.position === null || this.todo.position === '""') {
       this.mapService.getCurrentLocation().then(res => {
         console.log(res);
@@ -147,7 +147,7 @@ export class ItemDetailsPage implements OnInit {
     }
   }
 
-  public updateTodo() {
+  public updateTodo(): void {
     const isConnect = this.storageService.getConnect();
       try {
         if (isConnect) {
@@ -165,7 +165,7 @@ export class ItemDetailsPage implements OnInit {
       }
   }
 
-  public removePhoto(image: string) {
+  public removePhoto(image: string): void {
     let imageId = 0;
     for (let i = 0; i < this.images.length; i++) {
       if (this.images[i] == image) {
@@ -180,7 +180,7 @@ export class ItemDetailsPage implements OnInit {
       });
   }
 
-  public toPreviousPage() {
+  public toPreviousPage(): void {
     this.route.navigate(['/home']);
   }
 

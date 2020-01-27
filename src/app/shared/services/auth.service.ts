@@ -25,7 +25,7 @@ export class AuthService {
     this.checkToken();
   }
 
-  private checkToken() {
+  private checkToken(): void {
     this.storage.get(TOKEN_KEY).then(token => {
       if (token) {
         this.authenticationState.next(true);
@@ -78,7 +78,7 @@ export class AuthService {
       )
   }
 
-  public logout() {
+  public logout(): void {
     this.storage.remove(TOKEN_KEY).then(() => {
       this.storage.remove(USER_ID);
       this.authenticationState.next(false);
@@ -89,7 +89,7 @@ export class AuthService {
     return this.authenticationState.value;
   }
 
-  private showAlert(msg: string) {
+  private showAlert(msg: string): void {
     let alert = this.alertController.create({
       message: msg,
       header: 'Error',

@@ -19,7 +19,7 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
-  public createTodo(todo: Todo, photos): Observable<Object> {
+  public createTodo(todo: Todo, photos: string): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/create`, {
       todo: todo, 
       photos: photos
@@ -34,7 +34,7 @@ export class TodosService {
     return this.httpClient.post(`${this.url}/todos/image/${todoId}`, image);
   }
 
-  public deleteTodo(todoId: number) {
+  public deleteTodo(todoId: number): void {
     this.httpClient.delete(`${this.url}/todos/delete/${todoId}`)
         .subscribe(data => {
         }, error => {

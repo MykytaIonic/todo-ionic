@@ -14,7 +14,7 @@ export class InterceptorProvider implements HttpInterceptor {
     ) 
     { }
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<number>, next: HttpHandler): Observable<HttpEvent<number>> {
     let promise = this.storage.get('TOKEN_KEY');
     return from(promise).pipe(mergeMap((token) => {
       const req = request.clone({
