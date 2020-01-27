@@ -28,7 +28,7 @@ export class AddItemPage implements OnInit {
 
   public map: GoogleMap;
   public title: string;
-  public markerlatlong;
+  public markerlatlong: object;
   public image: string;
   public todo: Todo = {
     title: '',
