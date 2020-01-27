@@ -4,5 +4,6 @@ export interface Todo {
     description: string;
     isDone: boolean;
     user_id: number;
+    mongoId: number;
     position: string;
 }

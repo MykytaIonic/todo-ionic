@@ -19,19 +19,19 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
-  public createTodo(todo: Todo, photos: Photo[]): Observable<Object> {
-    return this.httpClient.post(`${this.url}/todos/create`, {
+  public createTodo(todo: Todo, photos: Photo[]): Observable<Todo> {
+    return this.httpClient.post<Todo>(`${this.url}/todos/create`, {
       todo: todo, 
       photos: photos
     })
   }
 
-  public uploadImage(image: FormData): Observable<Object> {
-    return this.httpClient.post(`${this.url}/todos/image`, image);
+  public uploadImage(image: FormData): Observable<Photo> {
+    return this.httpClient.post<Photo>(`${this.url}/todos/image`, image);
   }
 
-  public updateImage(image: FormData, todoId: number): Observable<Object> {
-    return this.httpClient.post(`${this.url}/todos/image/${todoId}`, image);
+  public updateImage(image: FormData, todoId: number): Observable<Photo> {
+    return this.httpClient.post<Photo>(`${this.url}/todos/image/${todoId}`, image);
   }
 
   public deleteTodo(todoId: number): void {
