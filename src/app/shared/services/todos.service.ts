@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { Todo } from '../models/todo.model';
-import { environment } from '../../../environments/environment';
 import { Photo } from '../models/photo.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

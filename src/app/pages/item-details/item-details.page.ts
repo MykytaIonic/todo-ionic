@@ -5,14 +5,13 @@ import { StorageService } from '../../shared/services/storage.service';
 import { MapService } from '../../shared/services/map.service';
 import { TodosService } from '../../shared/services/todos.service';
 import { PhotoService } from '../../shared/services/photo.service';
+import { Photo } from '../../shared/models/photo.model';
 import { environment } from '../../../environments/environment';
 import { DatabaseProvider } from '../../../providers/database/database';
 import { Storage } from '@ionic/storage';
 import { GoogleMap, GoogleMaps, GoogleMapOptions } from '@ionic-native/google-maps';
-import { Photo } from '../../shared/models/photo.model';
 import { ActionSheetController } from '@ionic/angular';
 import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
-import { Todo } from 'src/app/shared/models/todo.model';
 
 @Component({
   selector: 'app-item-details',

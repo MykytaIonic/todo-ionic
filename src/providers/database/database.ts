@@ -11,7 +11,7 @@ export class DatabaseProvider {
 
   private databaseObj: SQLiteObject;
   public name_model: string = "";
-  private row_data: object = [];
+  private row_data: any = [];
   readonly database_name: string = "todos.db";
   readonly todos: string = "todos";
   readonly deletedTable: string = "deletedTable";
@@ -100,7 +100,7 @@ export class DatabaseProvider {
     return id;
   }
 
-  public async getTodos(): Promise<object> {
+  public async getTodos() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -153,7 +153,7 @@ export class DatabaseProvider {
       });
   }
 
-  public async getDeleted(): Promise<object> {
+  public async getDeleted() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;
@@ -232,7 +232,7 @@ export class DatabaseProvider {
     });
   }
 
-  public async getUpdated(): Promise<object> {
+  public async getUpdated() {
     let user_id;
     await this.storage.get('USER_ID').then(data => {
       user_id = data;

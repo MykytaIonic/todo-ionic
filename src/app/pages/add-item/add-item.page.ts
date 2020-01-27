@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TodosService } from '../../shared/services/todos.service';
 import { Storage } from '@ionic/storage';
-import { MapService } from '../../shared/services/map.service';
-import { Todo } from '../../shared/models/todo.model';
 import { StorageService } from '../../shared/services/storage.service';
-import { Photo } from '../../shared/models/photo.model';
 import { PhotoService } from '../../shared/services/photo.service';
+import { MapService } from '../../shared/services/map.service';
+import { TodosService } from '../../shared/services/todos.service';
+import { Photo } from '../../shared/models/photo.model';
+import { Todo } from '../../shared/models/todo.model';
 import {
   GoogleMaps,
   GoogleMap,

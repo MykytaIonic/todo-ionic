@@ -3,7 +3,6 @@ import { FormGroup, Validators, FormControl, AbstractControl } from '@angular/fo
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
 import { SignupService } from 'src/app/shared/services/signup.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-register',
