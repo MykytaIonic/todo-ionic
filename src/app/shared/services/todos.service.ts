@@ -19,7 +19,7 @@ export class TodosService {
     return this.httpClient.get<Todo[]>(`${this.url}/todos`);
   }
 
-  public createTodo(todo: Todo, photos: string): Observable<Object> {
+  public createTodo(todo: Todo, photos: Photo[]): Observable<Object> {
     return this.httpClient.post(`${this.url}/todos/create`, {
       todo: todo, 
       photos: photos
