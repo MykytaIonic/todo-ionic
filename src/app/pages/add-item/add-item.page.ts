@@ -150,7 +150,7 @@ export class AddItemPage implements OnInit {
       try {
       const isConnect = await this.storageService.getConnect();
       let data;
-          if (isConnect === true) {
+          if (isConnect) {
             data = await this.todoService.createTodo(this.todo, this.photos);
           }
           else {
